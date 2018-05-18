@@ -18,47 +18,6 @@ import torchvision.models as models
 import torch.nn.functional as F
 
 
-def showImgAndLabels(image2d,label2d):
-    # Dump images as numpy arrays
-    fig, (ax0,ax1) = plt.subplots(1, 2, figsize=(10,10), facecolor='w')
-    ax0.imshow(image2d, interpolation='none', cmap='jet', origin='lower')
-    ax1.imshow(label2d, interpolation='none', cmap='jet', origin='lower',vmin=0., vmax=3.1)
-    ax0.set_title('Data',fontsize=20,fontname='Georgia',fontweight='bold')
-    #ax0.set_xlim(xlim)
-    #ax0.set_ylim(ylim)
-    ax1.set_title('Label',fontsize=20,fontname='Georgia',fontweight='bold')
-    #ax1.set_xlim(xlim)
-    #ax1.set_ylim(ylim)
-    plt.show()
-
-'''    
-for ibatch in range(out_var.shape[0]):
-    img_np = batch.images.cpu().numpy()[ibatch,0,:,:]
-    labels = batch.labels.cpu().numpy()[ibatch,:,:]
-    decision = decision_np[ibatch,:,:]
-    showImgAndLabels(img_np,labels,decision)
-'''
-
-def padandcrop(npimg2d):
-    imgpad  = np.zeros( (520,520), dtype=np.float32 )
-    imgpad[4:512+4,4:512+4] = npimg2d[:,:]
-    randx = np.random.randint(0,8)
-    randy = np.random.randint(0,8)
-    return imgpad[randx:randx+512,randy:randy+512]
-
-
-def padandcropandflip(npimg2d):
-    imgpad  = np.zeros( (520,520), dtype=np.float32 )
-    imgpad[4:512+4,4:512+4] = npimg2d[:,:]
-    if np.random.rand()>0.5:
-        imgpad = np.flip( imgpad, 0 )
-    if np.random.rand()>0.5:
-        imgpad = np.flip( imgpad, 1 )
-    randx = np.random.randint(0,8)
-    randy = np.random.randint(0,8)
-    return imgpad[randx:randx+512,randy:randy+512]
-
-
 # taken from torch.nn.modules.loss
 def _assert_no_grad(variable):
     assert not variable.requires_grad, \
@@ -182,7 +141,6 @@ def accuracy_vis(output, target):
                 
     # totals
     res.append( 100.0*float(total_corr)/total_pix )
-    #res.append( 100.0*float(corr_per_class[0]+corr_per_class[1])/(num_per_class[0]+num_per_class[1]) )
 
     #print res
     return res
@@ -192,7 +150,6 @@ def accuracy_flow(output, target, visibility, pix):
     batch_size = target.size(0)
     pred = output.resize_( target.size() ) #resize to match pred, just in case
     correct = torch.abs( pred - target )
-    #vis = visibility.gt( 0 ) + visibility.lt( 0 )
     correct = correct.le( pix ) #one below thresh, zero above thresh
     correct = (correct.long())*visibility #mask zero pixels
     #print correct.sum()
@@ -205,8 +162,6 @@ def accuracy_flow(output, target, visibility, pix):
     total_pix  = visibility.sum()
 
     # make result vector
-    #res = []
-    #res.append( 100.0*float(total_corr)/total_pix )
     res = 100.0*float(total_corr)/total_pix 
     #print res
     return res
