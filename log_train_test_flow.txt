@@ -1,0 +1,543 @@
+ThreadProcessor : {
+  InputFiles : ["/media/hdd1/rshara01/larflow/pytorch-resnet-example/larflow/larcv_test_003.root"]
+  NumBatchStorage : 3
+  NumThreads : 3
+  ProcessName : ["imageU","imageY","label","match"]
+  ProcessType : ["BatchFillerImage2D","BatchFillerImage2D","BatchFillerImage2D","BatchFillerImage2D"]
+  RandomAccess : false
+  Verbosity : 3
+  ProcessList : {
+    imageU : {
+      Channels : [0]
+      EnableMirror : false
+      ImageProducer : "adc"
+      Verbosity : 3
+    }
+
+    imageY : {
+      Channels : [2]
+      EnableMirror : false
+      ImageProducer : "adc"
+      Verbosity : 3
+    }
+
+    label : {
+      Channels : [4]
+      ImageProducer : "label"
+      Verbosity : 3
+    }
+
+    match : {
+      Channels : [0]
+      ImageProducer : "match"
+      Verbosity : 3
+    }
+
+  }
+
+}
+
+[93m setting verbosity [00m3
+Attempting to load all  10  into memory. good luck
+elapsed time to bring data into memory:  0.158241987228 sec
+[93m setting verbosity [00m3
+Epoch [0]:  lr=1.000e-06
+Epoch: [0][0/5]	Time 1.785 (1.785)	Data 0.003 (0.003)	Format 0.008 (0.008)	Train 1.774 (1.774)	Loss 47.362 (47.362)	visPrec@1 79.280 (79.280)	flowPrec@1 4.562 (4.562)
+Epoch [0] train aveloss=46.788 aveacc_vis=79.233 aveacc_flow=7.303
+Test: [0/5]	Time 0.051 (0.051)	Loss 36.378 (36.378)	visPrec@1 87.633 (87.633)	flowPrec@1 29.557 (29.557)
+Test:Result* visPrec@1 86.111	flowPrec@1 27.976	Loss 37.309
+Epoch [1]:  lr=1.000e-06
+Epoch: [1][0/5]	Time 0.037 (0.037)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.032 (0.032)	Loss 47.338 (47.338)	visPrec@1 78.835 (78.835)	flowPrec@1 6.668 (6.668)
+Epoch [1] train aveloss=46.511 aveacc_vis=79.124 aveacc_flow=8.769
+Test: [0/5]	Time 0.054 (0.054)	Loss 39.866 (39.866)	visPrec@1 84.408 (84.408)	flowPrec@1 25.682 (25.682)
+Test:Result* visPrec@1 82.935	flowPrec@1 22.010	Loss 41.083
+Epoch [2]:  lr=1.000e-06
+Epoch: [2][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.129 (46.129)	visPrec@1 78.442 (78.442)	flowPrec@1 9.727 (9.727)
+Epoch [2] train aveloss=46.977 aveacc_vis=78.821 aveacc_flow=6.755
+Test: [0/5]	Time 0.054 (0.054)	Loss 42.888 (42.888)	visPrec@1 82.484 (82.484)	flowPrec@1 19.125 (19.125)
+Test:Result* visPrec@1 81.040	flowPrec@1 15.258	Loss 43.944
+Epoch [3]:  lr=1.000e-06
+Epoch: [3][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.275 (46.275)	visPrec@1 78.103 (78.103)	flowPrec@1 10.017 (10.017)
+Epoch [3] train aveloss=46.940 aveacc_vis=78.577 aveacc_flow=6.866
+Test: [0/5]	Time 0.054 (0.054)	Loss 44.539 (44.539)	visPrec@1 81.669 (81.669)	flowPrec@1 14.851 (14.851)
+Test:Result* visPrec@1 80.213	flowPrec@1 11.844	Loss 45.313
+Epoch [4]:  lr=1.000e-06
+Epoch: [4][0/5]	Time 0.037 (0.037)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.031 (0.031)	Loss 46.347 (46.347)	visPrec@1 78.787 (78.787)	flowPrec@1 9.614 (9.614)
+Epoch [4] train aveloss=46.867 aveacc_vis=79.348 aveacc_flow=6.586
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.320 (45.320)	visPrec@1 81.140 (81.140)	flowPrec@1 12.446 (12.446)
+Test:Result* visPrec@1 79.616	flowPrec@1 10.259	Loss 45.892
+Epoch [5]:  lr=1.000e-06
+Epoch: [5][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.760 (46.760)	visPrec@1 79.372 (79.372)	flowPrec@1 6.966 (6.966)
+Epoch [5] train aveloss=46.790 aveacc_vis=79.165 aveacc_flow=6.787
+Test: [0/5]	Time 0.053 (0.053)	Loss 45.681 (45.681)	visPrec@1 81.027 (81.027)	flowPrec@1 11.650 (11.650)
+Test:Result* visPrec@1 79.491	flowPrec@1 9.603	Loss 46.160
+Epoch [6]:  lr=1.000e-06
+Epoch: [6][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.034 (0.034)	Loss 47.305 (47.305)	visPrec@1 78.834 (78.834)	flowPrec@1 6.680 (6.680)
+Epoch [6] train aveloss=46.675 aveacc_vis=79.155 aveacc_flow=8.131
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.981 (45.981)	visPrec@1 80.707 (80.707)	flowPrec@1 10.570 (10.570)
+Test:Result* visPrec@1 79.151	flowPrec@1 9.058	Loss 46.378
+Epoch [7]:  lr=1.000e-06
+Epoch: [7][0/5]	Time 0.038 (0.038)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.032 (0.032)	Loss 46.773 (46.773)	visPrec@1 78.541 (78.541)	flowPrec@1 8.372 (8.372)
+Epoch [7] train aveloss=46.758 aveacc_vis=78.574 aveacc_flow=8.324
+Test: [0/5]	Time 0.054 (0.054)	Loss 46.190 (46.190)	visPrec@1 80.594 (80.594)	flowPrec@1 10.187 (10.187)
+Test:Result* visPrec@1 79.014	flowPrec@1 8.647	Loss 46.552
+Epoch [8]:  lr=1.000e-06
+Epoch: [8][0/5]	Time 0.037 (0.037)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.032 (0.032)	Loss 46.757 (46.757)	visPrec@1 78.538 (78.538)	flowPrec@1 8.395 (8.395)
+Epoch [8] train aveloss=46.730 aveacc_vis=79.382 aveacc_flow=6.908
+Test: [0/5]	Time 0.054 (0.054)	Loss 46.254 (46.254)	visPrec@1 80.487 (80.487)	flowPrec@1 9.635 (9.635)
+Test:Result* visPrec@1 78.873	flowPrec@1 8.525	Loss 46.563
+Epoch [9]:  lr=1.000e-06
+Epoch: [9][0/5]	Time 0.038 (0.038)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.032 (0.032)	Loss 46.254 (46.254)	visPrec@1 78.548 (78.548)	flowPrec@1 10.228 (10.228)
+Epoch [9] train aveloss=46.613 aveacc_vis=78.948 aveacc_flow=7.726
+Test: [0/5]	Time 0.054 (0.054)	Loss 46.176 (46.176)	visPrec@1 80.723 (80.723)	flowPrec@1 10.118 (10.118)
+Test:Result* visPrec@1 79.158	flowPrec@1 8.722	Loss 46.527
+Epoch [10]:  lr=1.000e-06
+Epoch: [10][0/5]	Time 0.038 (0.038)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.032 (0.032)	Loss 46.206 (46.206)	visPrec@1 78.112 (78.112)	flowPrec@1 10.108 (10.108)
+Epoch [10] train aveloss=46.131 aveacc_vis=78.694 aveacc_flow=10.185
+Test: [0/5]	Time 0.054 (0.054)	Loss 46.284 (46.284)	visPrec@1 80.526 (80.526)	flowPrec@1 9.628 (9.628)
+Test:Result* visPrec@1 78.943	flowPrec@1 8.437	Loss 46.615
+Epoch [11]:  lr=1.000e-06
+Epoch: [11][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.469 (46.469)	visPrec@1 79.542 (79.542)	flowPrec@1 9.633 (9.633)
+Epoch [11] train aveloss=46.411 aveacc_vis=79.004 aveacc_flow=9.173
+Test: [0/5]	Time 0.054 (0.054)	Loss 46.202 (46.202)	visPrec@1 80.761 (80.761)	flowPrec@1 10.080 (10.080)
+Test:Result* visPrec@1 79.176	flowPrec@1 8.676	Loss 46.559
+Epoch [12]:  lr=1.000e-06
+Epoch: [12][0/5]	Time 0.038 (0.038)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.032 (0.032)	Loss 47.048 (47.048)	visPrec@1 79.192 (79.192)	flowPrec@1 5.862 (5.862)
+Epoch [12] train aveloss=46.788 aveacc_vis=79.251 aveacc_flow=6.984
+Test: [0/5]	Time 0.054 (0.054)	Loss 46.127 (46.127)	visPrec@1 80.912 (80.912)	flowPrec@1 10.455 (10.455)
+Test:Result* visPrec@1 79.344	flowPrec@1 8.930	Loss 46.487
+Epoch [13]:  lr=1.000e-06
+Epoch: [13][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.694 (46.694)	visPrec@1 78.605 (78.605)	flowPrec@1 7.981 (7.981)
+Epoch [13] train aveloss=46.839 aveacc_vis=78.709 aveacc_flow=8.418
+Test: [0/5]	Time 0.053 (0.053)	Loss 46.177 (46.177)	visPrec@1 80.750 (80.750)	flowPrec@1 10.225 (10.225)
+Test:Result* visPrec@1 79.141	flowPrec@1 8.695	Loss 46.542
+Epoch [14]:  lr=1.000e-06
+Epoch: [14][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.924 (46.924)	visPrec@1 79.545 (79.545)	flowPrec@1 4.882 (4.882)
+Epoch [14] train aveloss=46.931 aveacc_vis=79.561 aveacc_flow=6.990
+Test: [0/5]	Time 0.053 (0.053)	Loss 46.118 (46.118)	visPrec@1 80.774 (80.774)	flowPrec@1 10.386 (10.386)
+Test:Result* visPrec@1 79.184	flowPrec@1 8.848	Loss 46.472
+Epoch [15]:  lr=1.000e-06
+Epoch: [15][0/5]	Time 0.036 (0.036)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.031 (0.031)	Loss 47.267 (47.267)	visPrec@1 78.362 (78.362)	flowPrec@1 5.081 (5.081)
+Epoch [15] train aveloss=46.360 aveacc_vis=78.530 aveacc_flow=9.595
+Test: [0/5]	Time 0.054 (0.054)	Loss 46.117 (46.117)	visPrec@1 80.822 (80.822)	flowPrec@1 10.447 (10.447)
+Test:Result* visPrec@1 79.279	flowPrec@1 8.873	Loss 46.495
+Epoch [16]:  lr=1.000e-06
+Epoch: [16][0/5]	Time 0.038 (0.038)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.032 (0.032)	Loss 46.179 (46.179)	visPrec@1 78.536 (78.536)	flowPrec@1 10.347 (10.347)
+Epoch [16] train aveloss=46.674 aveacc_vis=79.257 aveacc_flow=7.588
+Test: [0/5]	Time 0.053 (0.053)	Loss 46.024 (46.024)	visPrec@1 81.117 (81.117)	flowPrec@1 10.692 (10.692)
+Test:Result* visPrec@1 79.523	flowPrec@1 9.073	Loss 46.421
+Epoch [17]:  lr=1.000e-06
+Epoch: [17][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.034 (0.034)	Loss 46.306 (46.306)	visPrec@1 79.582 (79.582)	flowPrec@1 9.479 (9.479)
+Epoch [17] train aveloss=46.440 aveacc_vis=78.952 aveacc_flow=8.736
+Test: [0/5]	Time 0.054 (0.054)	Loss 46.075 (46.075)	visPrec@1 80.881 (80.881)	flowPrec@1 10.547 (10.547)
+Test:Result* visPrec@1 79.331	flowPrec@1 8.966	Loss 46.461
+Epoch [18]:  lr=1.000e-06
+Epoch: [18][0/5]	Time 0.037 (0.037)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.031 (0.031)	Loss 46.887 (46.887)	visPrec@1 79.802 (79.802)	flowPrec@1 5.957 (5.957)
+Epoch [18] train aveloss=46.437 aveacc_vis=79.090 aveacc_flow=8.863
+Test: [0/5]	Time 0.054 (0.054)	Loss 46.161 (46.161)	visPrec@1 80.550 (80.550)	flowPrec@1 9.888 (9.888)
+Test:Result* visPrec@1 78.980	flowPrec@1 8.660	Loss 46.506
+Epoch [19]:  lr=1.000e-06
+Epoch: [19][0/5]	Time 0.037 (0.037)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.032 (0.032)	Loss 46.014 (46.014)	visPrec@1 78.841 (78.841)	flowPrec@1 11.139 (11.139)
+Epoch [19] train aveloss=46.668 aveacc_vis=78.766 aveacc_flow=7.982
+Test: [0/5]	Time 0.054 (0.054)	Loss 46.209 (46.209)	visPrec@1 80.510 (80.510)	flowPrec@1 9.789 (9.789)
+Test:Result* visPrec@1 78.922	flowPrec@1 8.519	Loss 46.538
+Epoch [20]:  lr=1.000e-06
+Epoch: [20][0/5]	Time 0.036 (0.036)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.031 (0.031)	Loss 46.705 (46.705)	visPrec@1 80.244 (80.244)	flowPrec@1 5.954 (5.954)
+Epoch [20] train aveloss=46.389 aveacc_vis=79.548 aveacc_flow=7.874
+Test: [0/5]	Time 0.053 (0.053)	Loss 46.226 (46.226)	visPrec@1 80.251 (80.251)	flowPrec@1 9.467 (9.467)
+Test:Result* visPrec@1 78.578	flowPrec@1 8.312	Loss 46.550
+Epoch [21]:  lr=1.000e-06
+Epoch: [21][0/5]	Time 0.038 (0.038)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.368 (46.368)	visPrec@1 79.547 (79.547)	flowPrec@1 9.834 (9.834)
+Epoch [21] train aveloss=46.854 aveacc_vis=79.566 aveacc_flow=7.299
+Test: [0/5]	Time 0.054 (0.054)	Loss 46.133 (46.133)	visPrec@1 80.442 (80.442)	flowPrec@1 9.858 (9.858)
+Test:Result* visPrec@1 78.785	flowPrec@1 8.570	Loss 46.471
+Epoch [22]:  lr=1.000e-06
+Epoch: [22][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.354 (46.354)	visPrec@1 79.550 (79.550)	flowPrec@1 9.834 (9.834)
+Epoch [22] train aveloss=46.216 aveacc_vis=79.201 aveacc_flow=9.310
+Test: [0/5]	Time 0.053 (0.053)	Loss 46.092 (46.092)	visPrec@1 80.546 (80.546)	flowPrec@1 9.896 (9.896)
+Test:Result* visPrec@1 78.871	flowPrec@1 8.654	Loss 46.456
+Epoch [23]:  lr=1.000e-06
+Epoch: [23][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 47.899 (47.899)	visPrec@1 78.695 (78.695)	flowPrec@1 3.915 (3.915)
+Epoch [23] train aveloss=46.445 aveacc_vis=79.217 aveacc_flow=7.951
+Test: [0/5]	Time 0.054 (0.054)	Loss 46.145 (46.145)	visPrec@1 80.410 (80.410)	flowPrec@1 9.605 (9.605)
+Test:Result* visPrec@1 78.777	flowPrec@1 8.466	Loss 46.490
+Epoch [24]:  lr=1.000e-06
+Epoch: [24][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.034 (0.034)	Loss 46.946 (46.946)	visPrec@1 78.432 (78.432)	flowPrec@1 5.709 (5.709)
+Epoch [24] train aveloss=46.881 aveacc_vis=79.353 aveacc_flow=6.233
+Test: [0/5]	Time 0.054 (0.054)	Loss 46.174 (46.174)	visPrec@1 80.332 (80.332)	flowPrec@1 9.697 (9.697)
+Test:Result* visPrec@1 78.649	flowPrec@1 8.449	Loss 46.491
+Epoch [25]:  lr=1.000e-06
+Epoch: [25][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.005 (0.005)	Train 0.032 (0.032)	Loss 47.555 (47.555)	visPrec@1 80.412 (80.412)	flowPrec@1 7.475 (7.475)
+Epoch [25] train aveloss=47.658 aveacc_vis=78.902 aveacc_flow=6.001
+Test: [0/5]	Time 0.054 (0.054)	Loss 46.282 (46.282)	visPrec@1 80.145 (80.145)	flowPrec@1 9.206 (9.206)
+Test:Result* visPrec@1 78.509	flowPrec@1 8.286	Loss 46.559
+Epoch [26]:  lr=1.000e-06
+Epoch: [26][0/5]	Time 0.037 (0.037)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.031 (0.031)	Loss 46.026 (46.026)	visPrec@1 78.092 (78.092)	flowPrec@1 10.446 (10.446)
+Epoch [26] train aveloss=46.847 aveacc_vis=78.690 aveacc_flow=6.483
+Test: [0/5]	Time 0.055 (0.055)	Loss 46.289 (46.289)	visPrec@1 80.172 (80.172)	flowPrec@1 9.229 (9.229)
+Test:Result* visPrec@1 78.572	flowPrec@1 8.261	Loss 46.567
+Epoch [27]:  lr=1.000e-06
+Epoch: [27][0/5]	Time 0.037 (0.037)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.032 (0.032)	Loss 45.798 (45.798)	visPrec@1 78.656 (78.656)	flowPrec@1 11.463 (11.463)
+Epoch [27] train aveloss=46.376 aveacc_vis=79.258 aveacc_flow=9.499
+Test: [0/5]	Time 0.054 (0.054)	Loss 46.098 (46.098)	visPrec@1 80.485 (80.485)	flowPrec@1 9.888 (9.888)
+Test:Result* visPrec@1 78.929	flowPrec@1 8.688	Loss 46.453
+Epoch [28]:  lr=1.000e-06
+Epoch: [28][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 47.144 (47.144)	visPrec@1 78.821 (78.821)	flowPrec@1 5.538 (5.538)
+Epoch [28] train aveloss=46.568 aveacc_vis=79.344 aveacc_flow=7.516
+Test: [0/5]	Time 0.054 (0.054)	Loss 46.000 (46.000)	visPrec@1 80.667 (80.667)	flowPrec@1 10.332 (10.332)
+Test:Result* visPrec@1 79.087	flowPrec@1 8.866	Loss 46.384
+Epoch [29]:  lr=1.000e-06
+Epoch: [29][0/5]	Time 0.036 (0.036)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.031 (0.031)	Loss 48.257 (48.257)	visPrec@1 79.456 (79.456)	flowPrec@1 5.547 (5.547)
+Epoch [29] train aveloss=46.875 aveacc_vis=79.208 aveacc_flow=7.633
+Test: [0/5]	Time 0.056 (0.056)	Loss 46.182 (46.182)	visPrec@1 80.107 (80.107)	flowPrec@1 9.467 (9.467)
+Test:Result* visPrec@1 78.441	flowPrec@1 8.335	Loss 46.515
+Epoch [30]:  lr=1.000e-06
+Epoch: [30][0/5]	Time 0.038 (0.038)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.032 (0.032)	Loss 47.339 (47.339)	visPrec@1 79.975 (79.975)	flowPrec@1 4.640 (4.640)
+Epoch [30] train aveloss=46.701 aveacc_vis=79.112 aveacc_flow=7.582
+Test: [0/5]	Time 0.054 (0.054)	Loss 46.027 (46.027)	visPrec@1 80.456 (80.456)	flowPrec@1 10.026 (10.026)
+Test:Result* visPrec@1 78.903	flowPrec@1 8.766	Loss 46.405
+Epoch [31]:  lr=1.000e-06
+Epoch: [31][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.034 (0.034)	Loss 46.531 (46.531)	visPrec@1 78.534 (78.534)	flowPrec@1 8.713 (8.713)
+Epoch [31] train aveloss=46.104 aveacc_vis=78.844 aveacc_flow=9.637
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.979 (45.979)	visPrec@1 80.613 (80.613)	flowPrec@1 10.386 (10.386)
+Test:Result* visPrec@1 79.048	flowPrec@1 8.910	Loss 46.384
+Epoch [32]:  lr=1.000e-06
+Epoch: [32][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.034 (0.034)	Loss 46.486 (46.486)	visPrec@1 79.370 (79.370)	flowPrec@1 7.330 (7.330)
+Epoch [32] train aveloss=46.628 aveacc_vis=79.404 aveacc_flow=6.930
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.855 (45.855)	visPrec@1 80.936 (80.936)	flowPrec@1 10.930 (10.930)
+Test:Result* visPrec@1 79.338	flowPrec@1 9.260	Loss 46.277
+Epoch [33]:  lr=1.000e-06
+Epoch: [33][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.034 (0.034)	Loss 46.572 (46.572)	visPrec@1 78.912 (78.912)	flowPrec@1 7.914 (7.914)
+Epoch [33] train aveloss=46.181 aveacc_vis=78.948 aveacc_flow=9.547
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.908 (45.908)	visPrec@1 80.727 (80.727)	flowPrec@1 10.654 (10.654)
+Test:Result* visPrec@1 79.174	flowPrec@1 9.093	Loss 46.318
+Epoch [34]:  lr=1.000e-06
+Epoch: [34][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 45.970 (45.970)	visPrec@1 78.444 (78.444)	flowPrec@1 10.896 (10.896)
+Epoch [34] train aveloss=46.789 aveacc_vis=79.452 aveacc_flow=8.381
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.895 (45.895)	visPrec@1 80.682 (80.682)	flowPrec@1 10.555 (10.555)
+Test:Result* visPrec@1 79.115	flowPrec@1 8.985	Loss 46.306
+Epoch [35]:  lr=1.000e-06
+Epoch: [35][0/5]	Time 0.038 (0.038)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.032 (0.032)	Loss 45.977 (45.977)	visPrec@1 78.334 (78.334)	flowPrec@1 10.875 (10.875)
+Epoch [35] train aveloss=46.512 aveacc_vis=79.057 aveacc_flow=8.305
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.982 (45.982)	visPrec@1 80.557 (80.557)	flowPrec@1 10.256 (10.256)
+Test:Result* visPrec@1 78.961	flowPrec@1 8.830	Loss 46.359
+Epoch [36]:  lr=1.000e-06
+Epoch: [36][0/5]	Time 0.037 (0.037)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.032 (0.032)	Loss 48.591 (48.591)	visPrec@1 78.714 (78.714)	flowPrec@1 4.181 (4.181)
+Epoch [36] train aveloss=46.628 aveacc_vis=78.970 aveacc_flow=8.448
+Test: [0/5]	Time 0.054 (0.054)	Loss 46.042 (46.042)	visPrec@1 80.466 (80.466)	flowPrec@1 9.965 (9.965)
+Test:Result* visPrec@1 78.877	flowPrec@1 8.679	Loss 46.412
+Epoch [37]:  lr=1.000e-06
+Epoch: [37][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.712 (46.712)	visPrec@1 79.484 (79.484)	flowPrec@1 6.339 (6.339)
+Epoch [37] train aveloss=47.087 aveacc_vis=78.933 aveacc_flow=6.373
+Test: [0/5]	Time 0.053 (0.053)	Loss 46.034 (46.034)	visPrec@1 80.481 (80.481)	flowPrec@1 10.057 (10.057)
+Test:Result* visPrec@1 78.946	flowPrec@1 8.809	Loss 46.396
+Epoch [38]:  lr=1.000e-06
+Epoch: [38][0/5]	Time 0.038 (0.038)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.042 (46.042)	visPrec@1 78.558 (78.558)	flowPrec@1 10.562 (10.562)
+Epoch [38] train aveloss=46.447 aveacc_vis=79.199 aveacc_flow=8.280
+Test: [0/5]	Time 0.054 (0.054)	Loss 46.045 (46.045)	visPrec@1 80.444 (80.444)	flowPrec@1 9.972 (9.972)
+Test:Result* visPrec@1 78.874	flowPrec@1 8.721	Loss 46.397
+Epoch [39]:  lr=1.000e-06
+Epoch: [39][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.110 (46.110)	visPrec@1 78.804 (78.804)	flowPrec@1 9.895 (9.895)
+Epoch [39] train aveloss=46.059 aveacc_vis=79.064 aveacc_flow=10.219
+Test: [0/5]	Time 0.053 (0.053)	Loss 45.947 (45.947)	visPrec@1 80.668 (80.668)	flowPrec@1 10.401 (10.401)
+Test:Result* visPrec@1 79.121	flowPrec@1 8.923	Loss 46.342
+Epoch [40]:  lr=1.000e-06
+Epoch: [40][0/5]	Time 0.035 (0.035)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.030 (0.030)	Loss 46.840 (46.840)	visPrec@1 78.815 (78.815)	flowPrec@1 5.262 (5.262)
+Epoch [40] train aveloss=46.431 aveacc_vis=78.770 aveacc_flow=8.137
+Test: [0/5]	Time 0.055 (0.055)	Loss 45.899 (45.899)	visPrec@1 80.756 (80.756)	flowPrec@1 10.685 (10.685)
+Test:Result* visPrec@1 79.206	flowPrec@1 9.037	Loss 46.320
+Epoch [41]:  lr=1.000e-06
+Epoch: [41][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 45.351 (45.351)	visPrec@1 79.447 (79.447)	flowPrec@1 11.502 (11.502)
+Epoch [41] train aveloss=46.264 aveacc_vis=79.404 aveacc_flow=8.043
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.975 (45.975)	visPrec@1 80.547 (80.547)	flowPrec@1 10.095 (10.095)
+Test:Result* visPrec@1 78.960	flowPrec@1 8.832	Loss 46.338
+Epoch [42]:  lr=1.000e-06
+Epoch: [42][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.034 (0.034)	Loss 46.674 (46.674)	visPrec@1 79.810 (79.810)	flowPrec@1 6.176 (6.176)
+Epoch [42] train aveloss=46.816 aveacc_vis=79.287 aveacc_flow=7.705
+Test: [0/5]	Time 0.054 (0.054)	Loss 46.023 (46.023)	visPrec@1 80.372 (80.372)	flowPrec@1 9.934 (9.934)
+Test:Result* visPrec@1 78.767	flowPrec@1 8.732	Loss 46.376
+Epoch [43]:  lr=1.000e-06
+Epoch: [43][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.034 (0.034)	Loss 45.843 (45.843)	visPrec@1 79.033 (79.033)	flowPrec@1 10.636 (10.636)
+Epoch [43] train aveloss=46.109 aveacc_vis=78.936 aveacc_flow=9.170
+Test: [0/5]	Time 0.054 (0.054)	Loss 46.003 (46.003)	visPrec@1 80.246 (80.246)	flowPrec@1 9.873 (9.873)
+Test:Result* visPrec@1 78.671	flowPrec@1 8.643	Loss 46.367
+Epoch [44]:  lr=1.000e-06
+Epoch: [44][0/5]	Time 0.037 (0.037)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.031 (0.031)	Loss 45.815 (45.815)	visPrec@1 78.845 (78.845)	flowPrec@1 11.437 (11.437)
+Epoch [44] train aveloss=46.394 aveacc_vis=79.027 aveacc_flow=8.071
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.895 (45.895)	visPrec@1 80.617 (80.617)	flowPrec@1 10.463 (10.463)
+Test:Result* visPrec@1 79.026	flowPrec@1 8.931	Loss 46.305
+Epoch [45]:  lr=1.000e-06
+Epoch: [45][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.658 (46.658)	visPrec@1 79.562 (79.562)	flowPrec@1 6.978 (6.978)
+Epoch [45] train aveloss=46.439 aveacc_vis=79.535 aveacc_flow=7.686
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.751 (45.751)	visPrec@1 80.835 (80.835)	flowPrec@1 10.945 (10.945)
+Test:Result* visPrec@1 79.257	flowPrec@1 9.297	Loss 46.186
+Epoch [46]:  lr=1.000e-06
+Epoch: [46][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.061 (46.061)	visPrec@1 79.548 (79.548)	flowPrec@1 9.812 (9.812)
+Epoch [46] train aveloss=46.539 aveacc_vis=78.778 aveacc_flow=7.782
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.795 (45.795)	visPrec@1 80.741 (80.741)	flowPrec@1 10.945 (10.945)
+Test:Result* visPrec@1 79.247	flowPrec@1 9.261	Loss 46.228
+Epoch [47]:  lr=1.000e-06
+Epoch: [47][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.662 (46.662)	visPrec@1 79.534 (79.534)	flowPrec@1 5.172 (5.172)
+Epoch [47] train aveloss=46.363 aveacc_vis=78.985 aveacc_flow=9.018
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.828 (45.828)	visPrec@1 80.661 (80.661)	flowPrec@1 10.608 (10.608)
+Test:Result* visPrec@1 79.102	flowPrec@1 9.096	Loss 46.258
+Epoch [48]:  lr=1.000e-06
+Epoch: [48][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.034 (0.034)	Loss 46.605 (46.605)	visPrec@1 79.488 (79.488)	flowPrec@1 6.452 (6.452)
+Epoch [48] train aveloss=47.061 aveacc_vis=78.592 aveacc_flow=6.285
+Test: [0/5]	Time 0.054 (0.054)	Loss 46.044 (46.044)	visPrec@1 80.287 (80.287)	flowPrec@1 9.873 (9.873)
+Test:Result* visPrec@1 78.745	flowPrec@1 8.664	Loss 46.391
+Epoch [49]:  lr=1.000e-06
+Epoch: [49][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 45.831 (45.831)	visPrec@1 78.428 (78.428)	flowPrec@1 11.110 (11.110)
+Epoch [49] train aveloss=46.320 aveacc_vis=79.007 aveacc_flow=7.670
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.864 (45.864)	visPrec@1 80.594 (80.594)	flowPrec@1 10.654 (10.654)
+Test:Result* visPrec@1 79.046	flowPrec@1 9.035	Loss 46.271
+Epoch [50]:  lr=1.000e-06
+Epoch: [50][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 45.960 (45.960)	visPrec@1 78.537 (78.537)	flowPrec@1 10.738 (10.738)
+Epoch [50] train aveloss=46.396 aveacc_vis=78.993 aveacc_flow=7.461
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.768 (45.768)	visPrec@1 80.764 (80.764)	flowPrec@1 10.853 (10.853)
+Test:Result* visPrec@1 79.239	flowPrec@1 9.215	Loss 46.205
+Epoch [51]:  lr=1.000e-06
+Epoch: [51][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.109 (46.109)	visPrec@1 79.541 (79.541)	flowPrec@1 10.098 (10.098)
+Epoch [51] train aveloss=45.700 aveacc_vis=79.158 aveacc_flow=10.574
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.834 (45.834)	visPrec@1 80.617 (80.617)	flowPrec@1 10.493 (10.493)
+Test:Result* visPrec@1 79.040	flowPrec@1 9.024	Loss 46.257
+Epoch [52]:  lr=1.000e-06
+Epoch: [52][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.034 (0.034)	Loss 45.939 (45.939)	visPrec@1 78.541 (78.541)	flowPrec@1 10.738 (10.738)
+Epoch [52] train aveloss=46.277 aveacc_vis=78.527 aveacc_flow=9.126
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.866 (45.866)	visPrec@1 80.657 (80.657)	flowPrec@1 10.623 (10.623)
+Test:Result* visPrec@1 79.116	flowPrec@1 8.998	Loss 46.291
+Epoch [53]:  lr=1.000e-06
+Epoch: [53][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.034 (0.034)	Loss 46.262 (46.262)	visPrec@1 79.606 (79.606)	flowPrec@1 8.366 (8.366)
+Epoch [53] train aveloss=46.407 aveacc_vis=79.306 aveacc_flow=7.972
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.904 (45.904)	visPrec@1 80.525 (80.525)	flowPrec@1 10.225 (10.225)
+Test:Result* visPrec@1 78.935	flowPrec@1 8.879	Loss 46.290
+Epoch [54]:  lr=1.000e-06
+Epoch: [54][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 45.978 (45.978)	visPrec@1 78.494 (78.494)	flowPrec@1 10.831 (10.831)
+Epoch [54] train aveloss=46.432 aveacc_vis=78.795 aveacc_flow=7.950
+Test: [0/5]	Time 0.053 (0.053)	Loss 45.916 (45.916)	visPrec@1 80.444 (80.444)	flowPrec@1 10.026 (10.026)
+Test:Result* visPrec@1 78.890	flowPrec@1 8.861	Loss 46.292
+Epoch [55]:  lr=1.000e-06
+Epoch: [55][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 45.555 (45.555)	visPrec@1 78.655 (78.655)	flowPrec@1 11.786 (11.786)
+Epoch [55] train aveloss=46.016 aveacc_vis=78.665 aveacc_flow=9.326
+Test: [0/5]	Time 0.056 (0.056)	Loss 46.036 (46.036)	visPrec@1 80.136 (80.136)	flowPrec@1 9.536 (9.536)
+Test:Result* visPrec@1 78.512	flowPrec@1 8.467	Loss 46.395
+Epoch [56]:  lr=1.000e-06
+Epoch: [56][0/5]	Time 0.037 (0.037)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.031 (0.031)	Loss 45.602 (45.602)	visPrec@1 79.454 (79.454)	flowPrec@1 9.938 (9.938)
+Epoch [56] train aveloss=46.744 aveacc_vis=79.289 aveacc_flow=7.663
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.926 (45.926)	visPrec@1 80.315 (80.315)	flowPrec@1 10.064 (10.064)
+Test:Result* visPrec@1 78.696	flowPrec@1 8.754	Loss 46.311
+Epoch [57]:  lr=1.000e-06
+Epoch: [57][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 48.984 (48.984)	visPrec@1 78.505 (78.505)	flowPrec@1 3.227 (3.227)
+Epoch [57] train aveloss=46.841 aveacc_vis=78.836 aveacc_flow=7.240
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.810 (45.810)	visPrec@1 80.663 (80.663)	flowPrec@1 10.463 (10.463)
+Test:Result* visPrec@1 79.068	flowPrec@1 9.057	Loss 46.238
+Epoch [58]:  lr=1.000e-06
+Epoch: [58][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.969 (46.969)	visPrec@1 79.272 (79.272)	flowPrec@1 5.012 (5.012)
+Epoch [58] train aveloss=46.703 aveacc_vis=78.881 aveacc_flow=6.947
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.824 (45.824)	visPrec@1 80.610 (80.610)	flowPrec@1 10.386 (10.386)
+Test:Result* visPrec@1 79.058	flowPrec@1 9.048	Loss 46.235
+Epoch [59]:  lr=1.000e-06
+Epoch: [59][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 48.003 (48.003)	visPrec@1 78.221 (78.221)	flowPrec@1 6.373 (6.373)
+Epoch [59] train aveloss=46.514 aveacc_vis=78.855 aveacc_flow=8.777
+Test: [0/5]	Time 0.055 (0.055)	Loss 45.955 (45.955)	visPrec@1 80.305 (80.305)	flowPrec@1 9.896 (9.896)
+Test:Result* visPrec@1 78.717	flowPrec@1 8.655	Loss 46.341
+Epoch [60]:  lr=1.000e-06
+Epoch: [60][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 45.736 (45.736)	visPrec@1 78.095 (78.095)	flowPrec@1 10.924 (10.924)
+Epoch [60] train aveloss=46.111 aveacc_vis=78.602 aveacc_flow=9.337
+Test: [0/5]	Time 0.056 (0.056)	Loss 45.949 (45.949)	visPrec@1 80.368 (80.368)	flowPrec@1 9.972 (9.972)
+Test:Result* visPrec@1 78.788	flowPrec@1 8.709	Loss 46.336
+Epoch [61]:  lr=1.000e-06
+Epoch: [61][0/5]	Time 0.038 (0.038)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.539 (46.539)	visPrec@1 79.528 (79.528)	flowPrec@1 5.307 (5.307)
+Epoch [61] train aveloss=45.877 aveacc_vis=78.859 aveacc_flow=9.964
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.827 (45.827)	visPrec@1 80.534 (80.534)	flowPrec@1 10.486 (10.486)
+Test:Result* visPrec@1 78.975	flowPrec@1 8.947	Loss 46.268
+Epoch [62]:  lr=1.000e-06
+Epoch: [62][0/5]	Time 0.038 (0.038)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.032 (0.032)	Loss 46.639 (46.639)	visPrec@1 79.196 (79.196)	flowPrec@1 6.361 (6.361)
+Epoch [62] train aveloss=46.281 aveacc_vis=79.102 aveacc_flow=9.827
+Test: [0/5]	Time 0.055 (0.055)	Loss 45.872 (45.872)	visPrec@1 80.368 (80.368)	flowPrec@1 10.187 (10.187)
+Test:Result* visPrec@1 78.733	flowPrec@1 8.759	Loss 46.298
+Epoch [63]:  lr=1.000e-06
+Epoch: [63][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 47.044 (47.044)	visPrec@1 78.523 (78.523)	flowPrec@1 6.015 (6.015)
+Epoch [63] train aveloss=47.139 aveacc_vis=78.905 aveacc_flow=5.941
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.944 (45.944)	visPrec@1 80.234 (80.234)	flowPrec@1 9.835 (9.835)
+Test:Result* visPrec@1 78.660	flowPrec@1 8.657	Loss 46.305
+Epoch [64]:  lr=1.000e-06
+Epoch: [64][0/5]	Time 0.036 (0.036)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.031 (0.031)	Loss 44.726 (44.726)	visPrec@1 79.433 (79.433)	flowPrec@1 12.994 (12.994)
+Epoch [64] train aveloss=46.813 aveacc_vis=79.146 aveacc_flow=6.398
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.828 (45.828)	visPrec@1 80.477 (80.477)	flowPrec@1 10.332 (10.332)
+Test:Result* visPrec@1 78.897	flowPrec@1 8.891	Loss 46.235
+Epoch [65]:  lr=1.000e-06
+Epoch: [65][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.249 (46.249)	visPrec@1 78.610 (78.610)	flowPrec@1 8.552 (8.552)
+Epoch [65] train aveloss=46.198 aveacc_vis=78.859 aveacc_flow=8.568
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.677 (45.677)	visPrec@1 80.723 (80.723)	flowPrec@1 10.899 (10.899)
+Test:Result* visPrec@1 79.201	flowPrec@1 9.262	Loss 46.134
+Epoch [66]:  lr=1.000e-06
+Epoch: [66][0/5]	Time 0.038 (0.038)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.032 (0.032)	Loss 46.128 (46.128)	visPrec@1 79.684 (79.684)	flowPrec@1 6.993 (6.993)
+Epoch [66] train aveloss=46.253 aveacc_vis=79.045 aveacc_flow=8.185
+Test: [0/5]	Time 0.055 (0.055)	Loss 45.856 (45.856)	visPrec@1 80.370 (80.370)	flowPrec@1 10.080 (10.080)
+Test:Result* visPrec@1 78.793	flowPrec@1 8.861	Loss 46.241
+Epoch [67]:  lr=1.000e-06
+Epoch: [67][0/5]	Time 0.038 (0.038)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.032 (0.032)	Loss 46.457 (46.457)	visPrec@1 79.483 (79.483)	flowPrec@1 6.594 (6.594)
+Epoch [67] train aveloss=46.430 aveacc_vis=78.795 aveacc_flow=8.086
+Test: [0/5]	Time 0.055 (0.055)	Loss 45.706 (45.706)	visPrec@1 80.626 (80.626)	flowPrec@1 10.800 (10.800)
+Test:Result* visPrec@1 79.103	flowPrec@1 9.193	Loss 46.157
+Epoch [68]:  lr=1.000e-06
+Epoch: [68][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.304 (46.304)	visPrec@1 78.902 (78.902)	flowPrec@1 8.278 (8.278)
+Epoch [68] train aveloss=46.462 aveacc_vis=78.788 aveacc_flow=7.615
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.765 (45.765)	visPrec@1 80.496 (80.496)	flowPrec@1 10.555 (10.555)
+Test:Result* visPrec@1 78.951	flowPrec@1 9.050	Loss 46.203
+Epoch [69]:  lr=1.000e-06
+Epoch: [69][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 45.467 (45.467)	visPrec@1 78.655 (78.655)	flowPrec@1 12.028 (12.028)
+Epoch [69] train aveloss=46.029 aveacc_vis=78.532 aveacc_flow=9.604
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.875 (45.875)	visPrec@1 80.291 (80.291)	flowPrec@1 10.133 (10.133)
+Test:Result* visPrec@1 78.723	flowPrec@1 8.758	Loss 46.285
+Epoch [70]:  lr=1.000e-06
+Epoch: [70][0/5]	Time 0.036 (0.036)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.031 (0.031)	Loss 45.897 (45.897)	visPrec@1 78.805 (78.805)	flowPrec@1 10.238 (10.238)
+Epoch [70] train aveloss=46.175 aveacc_vis=78.796 aveacc_flow=8.778
+Test: [0/5]	Time 0.055 (0.055)	Loss 45.882 (45.882)	visPrec@1 80.278 (80.278)	flowPrec@1 10.110 (10.110)
+Test:Result* visPrec@1 78.689	flowPrec@1 8.752	Loss 46.275
+Epoch [71]:  lr=1.000e-06
+Epoch: [71][0/5]	Time 0.037 (0.037)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.031 (0.031)	Loss 46.290 (46.290)	visPrec@1 80.235 (80.235)	flowPrec@1 6.468 (6.468)
+Epoch [71] train aveloss=46.104 aveacc_vis=79.304 aveacc_flow=8.826
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.654 (45.654)	visPrec@1 80.700 (80.700)	flowPrec@1 10.938 (10.938)
+Test:Result* visPrec@1 79.156	flowPrec@1 9.352	Loss 46.104
+Epoch [72]:  lr=1.000e-06
+Epoch: [72][0/5]	Time 0.038 (0.038)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 47.207 (47.207)	visPrec@1 80.424 (80.424)	flowPrec@1 8.142 (8.142)
+Epoch [72] train aveloss=46.875 aveacc_vis=79.065 aveacc_flow=7.432
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.713 (45.713)	visPrec@1 80.595 (80.595)	flowPrec@1 10.524 (10.524)
+Test:Result* visPrec@1 79.022	flowPrec@1 9.110	Loss 46.143
+Epoch [73]:  lr=1.000e-06
+Epoch: [73][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.034 (0.034)	Loss 46.271 (46.271)	visPrec@1 80.233 (80.233)	flowPrec@1 6.482 (6.482)
+Epoch [73] train aveloss=46.751 aveacc_vis=79.105 aveacc_flow=6.661
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.552 (45.552)	visPrec@1 80.832 (80.832)	flowPrec@1 11.213 (11.213)
+Test:Result* visPrec@1 79.291	flowPrec@1 9.491	Loss 46.034
+Epoch [74]:  lr=1.000e-06
+Epoch: [74][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.034 (0.034)	Loss 46.167 (46.167)	visPrec@1 78.609 (78.609)	flowPrec@1 8.705 (8.705)
+Epoch [74] train aveloss=45.810 aveacc_vis=78.838 aveacc_flow=10.456
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.499 (45.499)	visPrec@1 80.926 (80.926)	flowPrec@1 11.405 (11.405)
+Test:Result* visPrec@1 79.405	flowPrec@1 9.622	Loss 46.003
+Epoch [75]:  lr=1.000e-06
+Epoch: [75][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.803 (46.803)	visPrec@1 78.807 (78.807)	flowPrec@1 7.390 (7.390)
+Epoch [75] train aveloss=45.878 aveacc_vis=78.944 aveacc_flow=9.880
+Test: [0/5]	Time 0.053 (0.053)	Loss 45.792 (45.792)	visPrec@1 80.300 (80.300)	flowPrec@1 10.172 (10.172)
+Test:Result* visPrec@1 78.670	flowPrec@1 8.811	Loss 46.225
+Epoch [76]:  lr=1.000e-06
+Epoch: [76][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.034 (0.034)	Loss 45.586 (45.586)	visPrec@1 79.011 (79.011)	flowPrec@1 10.925 (10.925)
+Epoch [76] train aveloss=45.931 aveacc_vis=78.893 aveacc_flow=10.107
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.837 (45.837)	visPrec@1 80.135 (80.135)	flowPrec@1 9.919 (9.919)
+Test:Result* visPrec@1 78.513	flowPrec@1 8.652	Loss 46.265
+Epoch [77]:  lr=1.000e-06
+Epoch: [77][0/5]	Time 0.035 (0.035)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.030 (0.030)	Loss 48.206 (48.206)	visPrec@1 78.047 (78.047)	flowPrec@1 5.210 (5.210)
+Epoch [77] train aveloss=46.105 aveacc_vis=78.585 aveacc_flow=10.215
+Test: [0/5]	Time 0.058 (0.058)	Loss 45.748 (45.748)	visPrec@1 80.296 (80.296)	flowPrec@1 10.294 (10.294)
+Test:Result* visPrec@1 78.735	flowPrec@1 8.864	Loss 46.204
+Epoch [78]:  lr=1.000e-06
+Epoch: [78][0/5]	Time 0.035 (0.035)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.030 (0.030)	Loss 47.090 (47.090)	visPrec@1 78.325 (78.325)	flowPrec@1 4.763 (4.763)
+Epoch [78] train aveloss=46.334 aveacc_vis=78.876 aveacc_flow=8.532
+Test: [0/5]	Time 0.056 (0.056)	Loss 45.658 (45.658)	visPrec@1 80.493 (80.493)	flowPrec@1 10.585 (10.585)
+Test:Result* visPrec@1 78.935	flowPrec@1 9.167	Loss 46.102
+Epoch [79]:  lr=1.000e-06
+Epoch: [79][0/5]	Time 0.037 (0.037)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.031 (0.031)	Loss 45.589 (45.589)	visPrec@1 78.448 (78.448)	flowPrec@1 10.504 (10.504)
+Epoch [79] train aveloss=46.245 aveacc_vis=78.777 aveacc_flow=8.278
+Test: [0/5]	Time 0.055 (0.055)	Loss 45.788 (45.788)	visPrec@1 80.251 (80.251)	flowPrec@1 10.225 (10.225)
+Test:Result* visPrec@1 78.663	flowPrec@1 8.829	Loss 46.211
+Epoch [80]:  lr=1.000e-06
+Epoch: [80][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 47.074 (47.074)	visPrec@1 78.326 (78.326)	flowPrec@1 4.781 (4.781)
+Epoch [80] train aveloss=46.496 aveacc_vis=78.470 aveacc_flow=8.462
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.765 (45.765)	visPrec@1 80.420 (80.420)	flowPrec@1 10.340 (10.340)
+Test:Result* visPrec@1 78.826	flowPrec@1 8.886	Loss 46.192
+Epoch [81]:  lr=1.000e-06
+Epoch: [81][0/5]	Time 0.037 (0.037)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.031 (0.031)	Loss 45.760 (45.760)	visPrec@1 78.488 (78.488)	flowPrec@1 11.116 (11.116)
+Epoch [81] train aveloss=46.031 aveacc_vis=78.907 aveacc_flow=8.693
+Test: [0/5]	Time 0.055 (0.055)	Loss 45.646 (45.646)	visPrec@1 80.587 (80.587)	flowPrec@1 10.692 (10.692)
+Test:Result* visPrec@1 79.019	flowPrec@1 9.233	Loss 46.086
+Epoch [82]:  lr=1.000e-06
+Epoch: [82][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.347 (46.347)	visPrec@1 79.482 (79.482)	flowPrec@1 6.660 (6.660)
+Epoch [82] train aveloss=46.197 aveacc_vis=78.913 aveacc_flow=8.042
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.563 (45.563)	visPrec@1 80.737 (80.737)	flowPrec@1 10.968 (10.968)
+Test:Result* visPrec@1 79.132	flowPrec@1 9.309	Loss 46.039
+Epoch [83]:  lr=1.000e-06
+Epoch: [83][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.034 (0.034)	Loss 44.979 (44.979)	visPrec@1 79.462 (79.462)	flowPrec@1 11.964 (11.964)
+Epoch [83] train aveloss=45.857 aveacc_vis=79.035 aveacc_flow=9.994
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.649 (45.649)	visPrec@1 80.510 (80.510)	flowPrec@1 10.692 (10.692)
+Test:Result* visPrec@1 78.912	flowPrec@1 9.119	Loss 46.106
+Epoch [84]:  lr=1.000e-06
+Epoch: [84][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.797 (46.797)	visPrec@1 79.278 (79.278)	flowPrec@1 5.229 (5.229)
+Epoch [84] train aveloss=46.361 aveacc_vis=79.078 aveacc_flow=7.263
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.491 (45.491)	visPrec@1 80.811 (80.811)	flowPrec@1 11.290 (11.290)
+Test:Result* visPrec@1 79.280	flowPrec@1 9.538	Loss 45.970
+Epoch [85]:  lr=1.000e-06
+Epoch: [85][0/5]	Time 0.040 (0.040)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 45.793 (45.793)	visPrec@1 78.805 (78.805)	flowPrec@1 10.363 (10.363)
+Epoch [85] train aveloss=45.626 aveacc_vis=78.676 aveacc_flow=10.706
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.640 (45.640)	visPrec@1 80.499 (80.499)	flowPrec@1 10.631 (10.631)
+Test:Result* visPrec@1 78.881	flowPrec@1 9.084	Loss 46.100
+Epoch [86]:  lr=1.000e-06
+Epoch: [86][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.034 (0.034)	Loss 46.063 (46.063)	visPrec@1 78.608 (78.608)	flowPrec@1 8.834 (8.834)
+Epoch [86] train aveloss=46.658 aveacc_vis=79.158 aveacc_flow=7.442
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.524 (45.524)	visPrec@1 80.738 (80.738)	flowPrec@1 11.022 (11.022)
+Test:Result* visPrec@1 79.148	flowPrec@1 9.445	Loss 45.999
+Epoch [87]:  lr=1.000e-06
+Epoch: [87][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.291 (46.291)	visPrec@1 79.477 (79.477)	flowPrec@1 6.773 (6.773)
+Epoch [87] train aveloss=46.390 aveacc_vis=79.339 aveacc_flow=8.289
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.467 (45.467)	visPrec@1 80.796 (80.796)	flowPrec@1 11.167 (11.167)
+Test:Result* visPrec@1 79.232	flowPrec@1 9.513	Loss 45.953
+Epoch [88]:  lr=1.000e-06
+Epoch: [88][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 45.311 (45.311)	visPrec@1 78.654 (78.654)	flowPrec@1 12.252 (12.252)
+Epoch [88] train aveloss=45.386 aveacc_vis=78.718 aveacc_flow=11.891
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.470 (45.470)	visPrec@1 80.702 (80.702)	flowPrec@1 11.190 (11.190)
+Test:Result* visPrec@1 79.112	flowPrec@1 9.457	Loss 45.977
+Epoch [89]:  lr=1.000e-06
+Epoch: [89][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 45.674 (45.674)	visPrec@1 78.541 (78.541)	flowPrec@1 11.204 (11.204)
+Epoch [89] train aveloss=45.786 aveacc_vis=78.921 aveacc_flow=9.763
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.511 (45.511)	visPrec@1 80.640 (80.640)	flowPrec@1 11.052 (11.052)
+Test:Result* visPrec@1 79.113	flowPrec@1 9.436	Loss 45.995
+Epoch [90]:  lr=1.000e-06
+Epoch: [90][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 47.007 (47.007)	visPrec@1 80.417 (80.417)	flowPrec@1 8.487 (8.487)
+Epoch [90] train aveloss=46.290 aveacc_vis=79.440 aveacc_flow=8.433
+Test: [0/5]	Time 0.053 (0.053)	Loss 45.335 (45.335)	visPrec@1 80.943 (80.943)	flowPrec@1 11.558 (11.558)
+Test:Result* visPrec@1 79.406	flowPrec@1 9.798	Loss 45.860
+Epoch [91]:  lr=1.000e-06
+Epoch: [91][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 46.141 (46.141)	visPrec@1 80.233 (80.233)	flowPrec@1 6.710 (6.710)
+Epoch [91] train aveloss=45.813 aveacc_vis=79.347 aveacc_flow=9.326
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.463 (45.463)	visPrec@1 80.618 (80.618)	flowPrec@1 10.968 (10.968)
+Test:Result* visPrec@1 79.030	flowPrec@1 9.436	Loss 45.946
+Epoch [92]:  lr=1.000e-06
+Epoch: [92][0/5]	Time 0.035 (0.035)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.030 (0.030)	Loss 46.731 (46.731)	visPrec@1 79.272 (79.272)	flowPrec@1 5.333 (5.333)
+Epoch [92] train aveloss=46.037 aveacc_vis=79.040 aveacc_flow=8.107
+Test: [0/5]	Time 0.055 (0.055)	Loss 45.546 (45.546)	visPrec@1 80.358 (80.358)	flowPrec@1 10.493 (10.493)
+Test:Result* visPrec@1 78.740	flowPrec@1 9.162	Loss 46.010
+Epoch [93]:  lr=1.000e-06
+Epoch: [93][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.034 (0.034)	Loss 46.366 (46.366)	visPrec@1 78.427 (78.427)	flowPrec@1 6.361 (6.361)
+Epoch [93] train aveloss=45.530 aveacc_vis=78.832 aveacc_flow=10.454
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.489 (45.489)	visPrec@1 80.487 (80.487)	flowPrec@1 10.700 (10.700)
+Test:Result* visPrec@1 78.903	flowPrec@1 9.290	Loss 45.974
+Epoch [94]:  lr=1.000e-06
+Epoch: [94][0/5]	Time 0.036 (0.036)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.031 (0.031)	Loss 47.939 (47.939)	visPrec@1 79.493 (79.493)	flowPrec@1 6.132 (6.132)
+Epoch [94] train aveloss=45.933 aveacc_vis=78.853 aveacc_flow=10.380
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.766 (45.766)	visPrec@1 79.906 (79.906)	flowPrec@1 9.681 (9.681)
+Test:Result* visPrec@1 78.273	flowPrec@1 8.592	Loss 46.191
+Epoch [95]:  lr=1.000e-06
+Epoch: [95][0/5]	Time 0.036 (0.036)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.031 (0.031)	Loss 46.398 (46.398)	visPrec@1 78.799 (78.799)	flowPrec@1 5.700 (5.700)
+Epoch [95] train aveloss=46.709 aveacc_vis=78.776 aveacc_flow=6.106
+Test: [0/5]	Time 0.055 (0.055)	Loss 45.624 (45.624)	visPrec@1 80.326 (80.326)	flowPrec@1 10.348 (10.348)
+Test:Result* visPrec@1 78.747	flowPrec@1 9.063	Loss 46.047
+Epoch [96]:  lr=1.000e-06
+Epoch: [96][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.034 (0.034)	Loss 46.969 (46.969)	visPrec@1 78.330 (78.330)	flowPrec@1 4.945 (4.945)
+Epoch [96] train aveloss=46.235 aveacc_vis=78.618 aveacc_flow=8.561
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.556 (45.556)	visPrec@1 80.536 (80.536)	flowPrec@1 10.800 (10.800)
+Test:Result* visPrec@1 78.959	flowPrec@1 9.249	Loss 46.024
+Epoch [97]:  lr=1.000e-06
+Epoch: [97][0/5]	Time 0.038 (0.038)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.032 (0.032)	Loss 46.531 (46.531)	visPrec@1 78.768 (78.768)	flowPrec@1 6.555 (6.555)
+Epoch [97] train aveloss=46.128 aveacc_vis=79.121 aveacc_flow=8.218
+Test: [0/5]	Time 0.056 (0.056)	Loss 45.555 (45.555)	visPrec@1 80.394 (80.394)	flowPrec@1 10.578 (10.578)
+Test:Result* visPrec@1 78.783	flowPrec@1 9.127	Loss 46.027
+Epoch [98]:  lr=1.000e-06
+Epoch: [98][0/5]	Time 0.039 (0.039)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.033 (0.033)	Loss 45.797 (45.797)	visPrec@1 78.669 (78.669)	flowPrec@1 12.623 (12.623)
+Epoch [98] train aveloss=45.709 aveacc_vis=79.084 aveacc_flow=10.124
+Test: [0/5]	Time 0.054 (0.054)	Loss 45.436 (45.436)	visPrec@1 80.494 (80.494)	flowPrec@1 10.899 (10.899)
+Test:Result* visPrec@1 78.907	flowPrec@1 9.319	Loss 45.948
+Epoch [99]:  lr=1.000e-06
+Epoch: [99][0/5]	Time 0.037 (0.037)	Data 0.002 (0.002)	Format 0.004 (0.004)	Train 0.031 (0.031)	Loss 44.879 (44.879)	visPrec@1 78.567 (78.567)	flowPrec@1 13.205 (13.205)
+Epoch [99] train aveloss=45.517 aveacc_vis=78.940 aveacc_flow=10.845
+Test: [0/5]	Time 0.055 (0.055)	Loss 45.276 (45.276)	visPrec@1 80.926 (80.926)	flowPrec@1 11.650 (11.650)
+Test:Result* visPrec@1 79.363	flowPrec@1 9.798	Loss 45.819
