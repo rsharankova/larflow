@@ -88,14 +88,14 @@ def main():
         img_np  = np.zeros( (img.shape[0],  1, 512, 512), dtype=np.float32 )
         img2_np = np.zeros( (img2.shape[0], 1, 512, 512), dtype=np.float32 )
         lbl_np  = np.zeros( (lbl.shape[0], 512, 512), dtype=np.int )
-        vis_np  = np.zeros( (img.shape[0], 512, 512), dtype=np.int )
+        vis_np  = np.zeros( (vis.shape[0], 512, 512), dtype=np.int )
 
         #fvis_np = np.zeros( (vis.shape[0], 512, 512), dtype=np.float32 )
         for j in range(img.shape[0]):
             img_np[j,0,:,:]  = img[j].reshape( (512,512) )
             img2_np[j,0,:,:] = img2[j].reshape( (512,512) )
             lbl_np[j,:,:]    = lbl[j].reshape( (512,512) )
-            vis_np[j,:,:]    = img[j].reshape( (512,512) ) #target image
+            vis_np[j,:,:]    = vis[j].reshape( (512,512) ) 
             
         datatest = iovalid[0]
         imgtest = datatest["imagetest"]
@@ -212,20 +212,20 @@ def train(train_loader, model, criterion1, criterion2, lmbd, optimizer, nbatches
         img_np  = np.zeros( (img.shape[0], 1, 512, 512), dtype=np.float32 )
         img2_np = np.zeros( (img2.shape[0], 1, 512, 512), dtype=np.float32 )
         lbl_np  = np.zeros( (lbl.shape[0], 512, 512 ), dtype=np.float32 )
-        vis_np  = np.zeros( (img.shape[0], 512, 512 ), dtype=np.int )
+        vis_np  = np.zeros( (vis.shape[0], 512, 512 ), dtype=np.int )
 
         # batch loop
         for j in range(img.shape[0]):
             img_np[j,0,:,:]  = img[j].reshape( (512,512) )
             img2_np[j,0,:,:] = img2[j].reshape( (512,512) )
             lbl_np[j,:,:]    = lbl[j].reshape( (512,512) )
-            vis_np[j,:,:]    = img[j].reshape( (512,512) )
+            vis_np[j,:,:]    = vis[j].reshape( (512,512) )
 
         input1      = torch.from_numpy(img_np).cuda()
         input2      = torch.from_numpy(img2_np).cuda()
         target_flow = torch.from_numpy(lbl_np).cuda()
         target_vis  = torch.from_numpy(vis_np).cuda()
-        target_vis  = target_vis.lt( 0 ) + target_vis.gt( 0 )
+        #target_vis  = target_vis.lt( 0 ) + target_vis.gt( 0 )
         floatvis    = target_vis.float()
         target_vis  = target_vis.long()
         
@@ -322,19 +322,19 @@ def validate(val_loader, model, criterion1, criterion2, lmbd, nbatches, epoch, p
         img_np  = np.zeros( (img.shape[0], 1, 512, 512), dtype=np.float32 )
         img2_np = np.zeros( (img2.shape[0], 1, 512, 512), dtype=np.float32 )
         lbl_np  = np.zeros( (lbl.shape[0], 512, 512 ), dtype=np.float32 )
-        vis_np  = np.zeros( (img.shape[0], 512, 512 ), dtype=np.int )
+        vis_np  = np.zeros( (vis.shape[0], 512, 512 ), dtype=np.int )
 
         for j in range(img.shape[0]):
             img_np[j,0,:,:]  = img[j].reshape( (512,512) )
             img2_np[j,0,:,:] = img2[j].reshape( (512,512) )
             lbl_np[j,:,:]    = lbl[j].reshape( (512,512) )
-            vis_np[j,:,:]    = img[j].reshape( (512,512) )
+            vis_np[j,:,:]    = vis[j].reshape( (512,512) )
 
         input1      = torch.from_numpy(img_np).cuda()
         input2      = torch.from_numpy(img2_np).cuda()
         target_flow = torch.from_numpy(lbl_np).cuda()
         target_vis  = torch.from_numpy(vis_np).cuda()
-        target_vis  = target_vis.lt( 0 ) + target_vis.gt( 0 )
+        #target_vis  = target_vis.lt( 0 ) + target_vis.gt( 0 )
         floatvis    = target_vis.float()
         target_vis  = target_vis.long()
         
