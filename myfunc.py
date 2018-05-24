@@ -32,14 +32,14 @@ class PixelWiseFlowLoss(nn.modules.loss._Loss):
         self.reduce = reduce
         self.minval_np = np.ones( (1,1,1,1), dtype=np.float32)*minval*minval
         
-    def forward(self,predict,target,pixelweights):
+    def forward(self,predict,target,visibility):
         """
         predict: (b,c,h,w) tensor with output from flow deconv
         target:  (b,h,w) tensor with correct flow
-        pixelweights: (b,h,w) tensor with true matchability for each pixel
+        visibility: (b,h,w) tensor with true matchability for each pixel
         """
         _assert_no_grad(target)
-        _assert_no_grad(pixelweights)
+        _assert_no_grad(visibility)
         
         # set minval tensor
         minval_var = torch.autograd.Variable(torch.from_numpy(self.minval_np).cuda())        
@@ -49,9 +49,9 @@ class PixelWiseFlowLoss(nn.modules.loss._Loss):
         pixelloss = pixelloss*pixelloss
         
         pixelloss = torch.min(pixelloss, minval_var)
-        pixelloss *= pixelweights
+        pixelloss *= visibility
         s = pixelloss.sum()
-        s1 = pixelweights.sum()
+        s1 = visibility.sum()
         s = s/s1
         return s
 
@@ -61,6 +61,9 @@ class PixelWiseNLLLoss(nn.modules.loss._WeightedLoss):
         super(PixelWiseNLLLoss,self).__init__(weight,size_average)
         self.ignore_index = ignore_index
         self.reduce = False
+        nweight = np.ones((2), dtype=np.float32)
+        nweight[1] = 100.0
+        self.weight = torch.from_numpy(nweight)
         
     def forward(self,predict,target):
         """
@@ -113,10 +116,13 @@ def accuracy_vis(output, target):
 
     batch_size = target.size(0)
     _, pred = output.max( 1, keepdim=False) #take class with max prob. 
-    #print output, _, pred
     targetex = target.resize_( pred.size() ) # expanded view, should not include copy
     correct = pred.eq( targetex ) #returns 1 for accurate pred
-            
+    #x=int(targetex.nonzero()[0,1])
+    #y=int(targetex.nonzero()[0,2])
+    #print targetex[0,x,y]
+    #print output.cpu().numpy()[0,:,x,y]
+
     # we want counts for elements wise
     num_per_class = {}
     corr_per_class = {}
@@ -130,7 +136,7 @@ def accuracy_vis(output, target):
         corr_per_class[c] = (correct*classmat).sum() # mask by class matrix, then sum
         total_corr += corr_per_class[c]
         total_pix  += num_per_class[c]
-            
+
     # make result vector
     res = []
     for c in range(output.size(1)):

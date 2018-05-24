@@ -4,6 +4,7 @@ import time
 import traceback
 import numpy as np
 
+
 import torch
 import torch.nn as nn
 import torch.nn.parallel
@@ -16,6 +17,7 @@ import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 import torchvision.models as models
 import torch.nn.functional as F
+from torch.autograd import Variable
 
 # tensorboardX
 from tensorboardX import SummaryWriter
@@ -40,24 +42,25 @@ def main():
     
     model = network.mymodel( num_classes=1, input_channels=1, showsizes=False)
     model.cuda()
-
     #print "Loaded model: ",model
 
     # define loss function (criterion) and optimizer
-    criterion1 = myfunc.PixelWiseFlowLoss().cuda()
+    criterion1 = myfunc.PixelWiseFlowLoss(minval=4).cuda()
     criterion2 = myfunc.PixelWiseNLLLoss().cuda()
     
     # training parameters
     lmbd = 0.01
-    lr = 1.0e-6 #-3 
+    lr = 1.0e-4 #-3 
     momentum = 0.9
     weight_decay = 1.0e-3
     batchsize = 2
     batchsize_valid = 2
     start_epoch = 0
-    epochs      = 100 #1500
-    nbatches_per_epoch = 10/batchsize
-    nbatches_per_valid = 10/batchsize_valid
+    epochs      = 50 #1500
+    if len(sys.argv)>1:
+        epochs = int(sys.argv[1])
+    print "Number of epochs: ", epochs
+    
 
     optimizer = torch.optim.SGD(model.parameters(), lr,
                                 momentum=momentum,
@@ -72,6 +75,17 @@ def main():
     iotrain.start(batchsize)
     iovalid.start(batchsize_valid)
 
+    #nbatch per epoch
+    NENTRIES = iotrain.io.fetch_n_entries()
+    #NENTRIES=0;
+    if NENTRIES>0:
+            nbatches_per_epoch = NENTRIES/batchsize
+            nbatches_per_valid = NENTRIES/batchsize_valid
+    else:
+            nbatches_per_epoch = 1
+            nbatches_per_valid = 1
+                
+                
     # Resume training option
     if False:
         checkpoint = torch.load( "checkpoint.pth.p01.tar" )
@@ -117,7 +131,7 @@ def main():
 
         # train for one epoch
         try:
-            train_ave_loss, train_ave_acc_vis, train_ave_acc_flow = train(iotrain, model, criterion1, criterion2, lmbd, optimizer, nbatches_per_epoch, epoch, 10)
+            train_ave_loss, train_ave_acc_vis, train_ave_acc_flow = train(iotrain, model, criterion1, criterion2, lmbd, optimizer, nbatches_per_epoch, epoch, 50)
         except Exception,e:
             print "Error in training routine!"            
             print e.message
@@ -128,7 +142,7 @@ def main():
 
         # evaluate on validation set
         try:
-            prec1_vis, prec1_flow = validate(iovalid, model, criterion1, criterion2, lmbd, nbatches_per_valid, epoch, 10)
+            prec1_vis, prec1_flow = validate(iovalid, model, criterion1, criterion2, lmbd, nbatches_per_valid, epoch, 50)
         except Exception,e:
             print "Error in validation routine!"            
             print e.message
@@ -136,6 +150,9 @@ def main():
             traceback.print_exc(e)
             break
 
+        #aa= model.layer1.conv1.weight.data.cpu().numpy()
+        #print aa.shape, aa[0,0,0,0]
+        
         # remember best prec@1 and save checkpoint
         is_best_vis = prec1_vis > best_prec1_vis
         best_prec1_vis = max(prec1_vis, best_prec1_vis)
@@ -156,7 +173,7 @@ def main():
             'optimizer' : optimizer.state_dict(),
         }, is_best_flow, -1)
 
-        if epoch==5*1:
+        if epoch==50*1:
             myfunc.save_checkpoint({
                 'epoch': epoch + 1,
                 'state_dict': model.state_dict(),
@@ -243,7 +260,8 @@ def train(train_loader, model, criterion1, criterion2, lmbd, optimizer, nbatches
         output_flow, output_vis = model.forward(input1_var, input2_var)
         loss1 = criterion1(output_flow, target_flow_var, floatvis_var)
         loss2 = criterion2(output_vis, target_vis_var)
-        loss = loss1 #+ lmbd*loss2
+        #loss = loss1 + lmbd*loss2
+        loss = loss1
         
         # measure accuracy and record loss
         prec1_vis = myfunc.accuracy_vis(output_vis.data, target_vis)
@@ -254,7 +272,7 @@ def train(train_loader, model, criterion1, criterion2, lmbd, optimizer, nbatches
         prec1_flow.append( myfunc.accuracy_flow(output_flow.data, target_flow, target_vis, 20) )
 
         losses.update(loss.data[0], input1.size(0))
-        top1_vis.update(prec1_vis[0], input1.size(0))
+        top1_vis.update(prec1_vis[2], input1.size(0))
         top1_flow.update(prec1_flow[0], input1.size(0))
         for k,acc in enumerate(prec1_vis):
             acc_list_vis[k].update( acc )
@@ -269,7 +287,14 @@ def train(train_loader, model, criterion1, criterion2, lmbd, optimizer, nbatches
 
         # measure elapsed time
         batch_time.update(time.time() - batchstart)
-
+        '''
+        for name, param in model.named_parameters():
+            if 'bn' not in name:
+                name = name.replace('.', '/')
+                writer.add_histogram(name, param.data, i*(1+epoch), 20)
+                #writer.add_histogram(name+'/grad', param.grad.data, epoch)
+        '''
+        
         if i%print_freq==0:
             status = (epoch,i,nbatches,
                       batch_time.val,batch_time.avg,
@@ -282,14 +307,14 @@ def train(train_loader, model, criterion1, criterion2, lmbd, optimizer, nbatches
             print "Epoch: [%d][%d/%d]\tTime %.3f (%.3f)\tData %.3f (%.3f)\tFormat %.3f (%.3f)\tTrain %.3f (%.3f)\tLoss %.3f (%.3f)\tvisPrec@1 %.3f (%.3f)\tflowPrec@1 %.3f (%.3f)"%status
 
     writer.add_scalar('data/train_loss', losses.avg, epoch )
-    writer.add_scalars('data/train_accuracy_vis', {'vis tot': acc_list_vis[0].avg,
-                                                   'vis 0': acc_list_vis[1].avg,
-                                                   'vis 1': acc_list_vis[2].avg}, epoch )
+    writer.add_scalars('data/train_accuracy_vis', {'vis 0': acc_list_vis[0].avg,
+                                                   'vis 1': acc_list_vis[1].avg,
+                                                   'vis tot': acc_list_vis[2].avg}, epoch )
     writer.add_scalars('data/train_accuracy_flow', {'05pix': acc_list_flow[0].avg,
                                                     '10pix': acc_list_flow[1].avg,
                                                     '15pix': acc_list_flow[2].avg,
                                                     '20pix': acc_list_flow[3].avg}, epoch )
-
+    
     return losses.avg,top1_vis.avg, top1_flow.avg
 
 
@@ -348,7 +373,8 @@ def validate(val_loader, model, criterion1, criterion2, lmbd, nbatches, epoch, p
         output_flow, output_vis = model.forward(input1_var, input2_var)
         loss1 = criterion1(output_flow, target_flow_var, floatvis_var)
         loss2 = criterion2(output_vis, target_vis_var)
-        loss = loss1 + lmbd*loss2
+        #loss = loss1 + lmbd*loss2
+        loss = loss1
         
         # measure accuracy and record loss
         prec1_vis = myfunc.accuracy_vis(output_vis.data, target_vis)
@@ -359,7 +385,7 @@ def validate(val_loader, model, criterion1, criterion2, lmbd, nbatches, epoch, p
         prec1_flow.append( myfunc.accuracy_flow(output_flow.data, target_flow, target_vis, 20) )
 
         losses.update(loss.data[0], input1.size(0))
-        top1_vis.update(prec1_vis[0], input1.size(0))
+        top1_vis.update(prec1_vis[2], input1.size(0))
         top1_flow.update(float(prec1_flow[0]), input1.size(0))
         for k,acc in enumerate(prec1_vis):
             acc_list_vis[k].update( acc )
@@ -375,9 +401,9 @@ def validate(val_loader, model, criterion1, criterion2, lmbd, nbatches, epoch, p
             print "Test: [%d/%d]\tTime %.3f (%.3f)\tLoss %.3f (%.3f)\tvisPrec@1 %.3f (%.3f)\tflowPrec@1 %.3f (%.3f)"%status
 
     writer.add_scalar( 'data/valid_loss', losses.avg, epoch )
-    writer.add_scalars('data/valid_accuracy_vis', {'vis tot': acc_list_vis[0].avg,
-                                                   'vis 0': acc_list_vis[1].avg,
-                                                   'vis 1': acc_list_vis[2].avg}, epoch )
+    writer.add_scalars('data/valid_accuracy_vis', {'vis 0': acc_list_vis[0].avg,
+                                                   'vis 1': acc_list_vis[1].avg,
+                                                   'vis tot': acc_list_vis[2].avg}, epoch )
     writer.add_scalars('data/valid_accuracy_flow', {'05pix': acc_list_flow[0].avg,
                                                     '10pix': acc_list_flow[1].avg,
                                                     '15pix': acc_list_flow[2].avg,

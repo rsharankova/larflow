@@ -44,7 +44,17 @@ class BasicBlockResNet(nn.Module):
         out = self.relu(out)
 
         return out
-
+class DoubleResNet(nn.Module):
+    def __init__(self,inplanes,planes,stride=1):
+        super(DoubleResNet,self).__init__()
+        self.res1 = BasicBlockResNet(inplanes,planes,stride)
+        self.res2 = BasicBlockResNet(  planes,planes,     1)
+        
+    def forward(self, x):
+        out = self.res1(x)
+        out = self.res2(out)
+        return out
+                                                                                
     
 class BasicBlockConv(nn.Module):
 
@@ -75,12 +85,14 @@ class BasicBlockDeconv(nn.Module):
         self.deconv1 = nn.ConvTranspose2d( d_inplanes, d_planes, kernel_size=3, stride=stride, padding=pad,  bias=False )
         self.bn1 = nn.BatchNorm2d(d_planes)
         self.relu1 = nn.ReLU(inplace=True)
-
+        #self.res    = DoubleResNet(res_outplanes+deconv_outplanes,res_outplanes,stride=1)
+        
     def forward(self, x, outsize):
         out = self.deconv1(x, output_size=outsize.size())
         out = self.bn1(out)
         out = self.relu1(out)
-
+        #out = torch.cat( [out,outsize], 1 )
+        #out = self.res(out)
         return out
 
 
