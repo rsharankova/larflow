@@ -26,11 +26,12 @@ def _assert_no_grad(variable):
 
     
 class PixelWiseFlowLoss(nn.modules.loss._Loss):
-    def __init__(self,size_average=True, reduce=False, minval=5):
+    def __init__(self,size_average=False, reduce=False, minval=5):
         super(PixelWiseFlowLoss,self).__init__()
         self.size_average = size_average
         self.reduce = reduce
-        self.minval_np = np.ones( (1,1,1,1), dtype=np.float32)*minval*minval
+        self.minval = minval
+        self.SmoothL1 = nn.SmoothL1Loss(self.size_average, self.reduce)
         
     def forward(self,predict,target,visibility):
         """
@@ -40,18 +41,23 @@ class PixelWiseFlowLoss(nn.modules.loss._Loss):
         """
         _assert_no_grad(target)
         _assert_no_grad(visibility)
-        
-        # set minval tensor
-        minval_var = torch.autograd.Variable(torch.from_numpy(self.minval_np).cuda())        
+        '''
+        minval_np = np.ones( predict.size() , dtype=np.float32)*self.minval*self.minval
+        minval_var = torch.autograd.Variable(torch.from_numpy(minval_np).cuda())        
         _assert_no_grad(minval_var)
-        
+
+        #old loss  
         pixelloss = target - predict
         pixelloss = pixelloss*pixelloss
-        
         pixelloss = torch.min(pixelloss, minval_var)
+        '''
+        pixelloss = self.SmoothL1(predict, target );
         pixelloss *= visibility
         s = pixelloss.sum()
         s1 = visibility.sum()
+        if s1 is None:
+            s1=1
+            s=0
         s = s/s1
         return s
 
@@ -118,10 +124,6 @@ def accuracy_vis(output, target):
     _, pred = output.max( 1, keepdim=False) #take class with max prob. 
     targetex = target.resize_( pred.size() ) # expanded view, should not include copy
     correct = pred.eq( targetex ) #returns 1 for accurate pred
-    #x=int(targetex.nonzero()[0,1])
-    #y=int(targetex.nonzero()[0,2])
-    #print targetex[0,x,y]
-    #print output.cpu().numpy()[0,:,x,y]
 
     # we want counts for elements wise
     num_per_class = {}
@@ -154,11 +156,10 @@ def accuracy_vis(output, target):
 def accuracy_flow(output, target, visibility, pix):
 
     batch_size = target.size(0)
-    pred = output.resize_( target.size() ) #resize to match pred, just in case
+    pred = output.resize_( target.size() ) #resize to match pred
     correct = torch.abs( pred - target )
     correct = correct.le( pix ) #one below thresh, zero above thresh
-    correct = (correct.long())*visibility #mask zero pixels
-    #print correct.sum()
+    correct = (correct.float())*visibility #mask zero pixels
 
     # we want counts for elements wise
     total_corr = 0
@@ -168,6 +169,9 @@ def accuracy_flow(output, target, visibility, pix):
     total_pix  = visibility.sum()
 
     # make result vector
+    if total_pix==0:
+        total_pix=1.0
+        total_corr=0.0
     res = 100.0*float(total_corr)/total_pix 
     #print res
     return res

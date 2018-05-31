@@ -45,10 +45,10 @@ class BasicBlockResNet(nn.Module):
 
         return out
 class DoubleResNet(nn.Module):
-    def __init__(self,inplanes,planes,stride=1):
+    def __init__(self,inplanes,planes,stride=1,pad=1):
         super(DoubleResNet,self).__init__()
-        self.res1 = BasicBlockResNet(inplanes,planes,stride)
-        self.res2 = BasicBlockResNet(  planes,planes,     1)
+        self.res1 = BasicBlockResNet(inplanes,planes,stride,1)
+        self.res2 = BasicBlockResNet(  planes,planes,     1,1)
         
     def forward(self, x):
         out = self.res1(x)
@@ -104,8 +104,11 @@ class TestNet(nn.Module):
         super(TestNet, self).__init__()
         self._showsizes = showsizes # print size at each layer
 
+        #shrink original image
+        #self.maxpool0 = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
         #encoding
-        self.layer0 = self._make_clayer(blockconv, input_channels, self.inplanes*1,  stride=1, pad=1) #1->16
+        # self.layer0 = self._make_clayer(blockconv, input_channels, self.inplanes*1,  stride=1, pad=1) #1->16
+        self.layer0 = self._make_clayer(BasicBlockConv, input_channels, self.inplanes*1,  stride=1, pad=1) #1->16
         self.layer1 = self._make_clayer(blockconv, self.inplanes*1, self.inplanes*2,  stride=2, pad=1) #16->32
         self.layer2 = self._make_clayer(blockconv, self.inplanes*2, self.inplanes*2,  stride=1, pad=1) #32->32
         self.layer3 = self._make_clayer(blockconv, self.inplanes*2, self.inplanes*4,  stride=2, pad=1) #32->64
@@ -127,10 +130,13 @@ class TestNet(nn.Module):
 
         # decoding vis        
         self.layer17 = self._make_clayer(blockconv, self.inplanes*32, self.inplanes*16,  stride=1, pad=1)#256+256->256
+        #self.layer17 = self._make_clayer(BasicBlockConv, self.inplanes*32, self.inplanes*16,  stride=1, pad=1)#256+256->256
         self.layer18 = self._make_dlayer(blockdeconv, self.inplanes*16, self.inplanes*8,  stride=2, pad=1)#256->128
         self.layer19 = self._make_clayer(blockconv, self.inplanes*8, self.inplanes*8,  stride=1, pad=1)#128->128
+        #self.layer19 = self._make_clayer(BasicBlockConv, self.inplanes*8, self.inplanes*8,  stride=1, pad=1)#128->128
         self.layer20 = self._make_dlayer(blockdeconv, self.inplanes*8, self.inplanes*4,  stride=2, pad=1)#128->64
         self.layer21 = self._make_clayer(blockconv, self.inplanes*4, self.inplanes*4,  stride=1, pad=1)#64->64
+        #self.layer21 = self._make_clayer(BasicBlockConv, self.inplanes*4, self.inplanes*4,  stride=1, pad=1)#64->64
         self.layer22 = self._make_dlayer(blockdeconv, self.inplanes*4, self.inplanes*2,  stride=2, pad=1)#64->32
         self.layer23 = self._make_clayer(blockconv, self.inplanes*2, self.inplanes*2,  stride=1, pad=1)#32->32
         self.layer24 = self._make_dlayer(blockdeconv, self.inplanes*2, self.inplanes*1,  stride=2, pad=1)#32->16
@@ -142,7 +148,6 @@ class TestNet(nn.Module):
         self.softmax = nn.LogSoftmax(dim=1)
 
         #unused
-        #self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
         #self.avgpool = nn.AvgPool2d(3, stride=2)
         #self.dropout = nn.Dropout2d(p=0.5,inplace=True)
         #print "block.expansion=",block.expansion
@@ -175,7 +180,13 @@ class TestNet(nn.Module):
         return block(inplanes, planes, stride, pad)
 
     def forward(self, x, y):
+        x0 = self.layer0(x)    
+        x2 = self.layer1(x0)
+        x4 = self.layer3(x2)
+        x6 = self.layer5(x4)
+        x7 = self.layer7(x6)
 
+        '''
         x0 = self.layer0(x)    
         x1 = self.layer1(x0)
         x2 = self.layer2(x1)
@@ -184,7 +195,7 @@ class TestNet(nn.Module):
         x5 = self.layer5(x4)
         x6 = self.layer6(x5)
         x7 = self.layer7(x6)
-        '''
+        
         if self._showsizes:
             print "input: ", x.size()
             print "after encoding: "
@@ -197,7 +208,13 @@ class TestNet(nn.Module):
             print "  x6: ",x6.size()
             print "  x7: ",x7.size()
         '''
-        
+        y0 = self.layer0(y)    
+        y2 = self.layer1(y0)
+        y4 = self.layer3(y2)
+        y6 = self.layer5(y4)
+        y7 = self.layer7(y6)
+
+        '''        
         y0 = self.layer0(y)
         y1 = self.layer1(y0)
         y2 = self.layer2(y1)
@@ -206,7 +223,7 @@ class TestNet(nn.Module):
         y5 = self.layer5(y4)
         y6 = self.layer6(y5)
         y7 = self.layer7(y6)
-        '''
+        
         if self._showsizes:
             print "after encoding: "
             print "  y0: ",y.size()
@@ -269,7 +286,9 @@ class TestNet(nn.Module):
 
 def mymodel( **kwargs):
 
-    model = TestNet(BasicBlockConv, BasicBlockDeconv, **kwargs)
+    #model = TestNet(BasicBlockConv, BasicBlockDeconv, **kwargs)
+    #model = TestNet(BasicBlockResNet, BasicBlockDeconv, **kwargs)
+    model = TestNet(DoubleResNet, BasicBlockDeconv, **kwargs)
 
     return model
 

@@ -3,7 +3,7 @@ import shutil
 import time
 import traceback
 import numpy as np
-
+import cv2 as cv
 
 import torch
 import torch.nn as nn
@@ -42,24 +42,25 @@ def main():
     
     model = network.mymodel( num_classes=1, input_channels=1, showsizes=False)
     model.cuda()
-    #print "Loaded model: ",model
+    print "Loaded model: ",model
 
     # define loss function (criterion) and optimizer
     criterion1 = myfunc.PixelWiseFlowLoss(minval=4).cuda()
     criterion2 = myfunc.PixelWiseNLLLoss().cuda()
     
     # training parameters
-    lmbd = 0.01
+    lmbd = 0.5
     lr = 1.0e-4 #-3 
     momentum = 0.9
     weight_decay = 1.0e-3
-    batchsize = 2
-    batchsize_valid = 2
+    batchsize = 6
+    batchsize_valid = 6
     start_epoch = 0
     epochs      = 50 #1500
     if len(sys.argv)>1:
         epochs = int(sys.argv[1])
     print "Number of epochs: ", epochs
+    print "Train batch: ", batchsize
     
 
     optimizer = torch.optim.SGD(model.parameters(), lr,
@@ -93,29 +94,57 @@ def main():
         model.load_state_dict(checkpoint["state_dict"])
         optimizer.load_state_dict(checkpoint['optimizer'])
     
-    if False:
+    if False: #debug
         data = iotrain[0]
         img  = data["imageY"]
         img2 = data["imageU"]
         lbl  = data["label"]
         vis  = data["match"]
+        '''
         img_np  = np.zeros( (img.shape[0],  1, 512, 512), dtype=np.float32 )
         img2_np = np.zeros( (img2.shape[0], 1, 512, 512), dtype=np.float32 )
-        lbl_np  = np.zeros( (lbl.shape[0], 512, 512), dtype=np.int )
+        lbl_np  = np.zeros( (lbl.shape[0], 1, 512, 512), dtype=np.int )
         vis_np  = np.zeros( (vis.shape[0], 512, 512), dtype=np.int )
+        fvis_np  = np.zeros( (vis.shape[0], 1, 512, 512), dtype=np.float32 )
 
-        #fvis_np = np.zeros( (vis.shape[0], 512, 512), dtype=np.float32 )
         for j in range(img.shape[0]):
             img_np[j,0,:,:]  = img[j].reshape( (512,512) )
             img2_np[j,0,:,:] = img2[j].reshape( (512,512) )
-            lbl_np[j,:,:]    = lbl[j].reshape( (512,512) )
-            vis_np[j,:,:]    = vis[j].reshape( (512,512) ) 
-            
+            lbl_np[j,0,:,:]  = lbl[j].reshape( (512,512) )
+            vis_np[j,:,:]    = vis[j].reshape( (512,512) )
+            fvis_np[j,0,:,:]  = vis[j].reshape( (512,512) ) 
+        '''
+        img_np  = np.zeros( ( 512, 512), dtype=np.float32 )
+        img2_np = np.zeros( ( 512, 512), dtype=np.float32 )
+        lbl_np  = np.zeros( ( 512, 512), dtype=np.int )
+        vis_np  = np.zeros( ( 512, 512), dtype=np.int )
+        fvis_np = np.zeros( ( 512, 512), dtype=np.float32 )
+
+        for j in range(1):#img.shape[0]):
+            img_np[:,:]  = img[j].reshape( (512,512) )
+            img2_np[:,:] = img2[j].reshape( (512,512) )
+            lbl_np[:,:]  = lbl[j].reshape( (512,512) )
+            vis_np[:,:]  = vis[j].reshape( (512,512) )
+            fvis_np[:,:] = vis[j].reshape( (512,512) ) 
+
+        tar_x_visi = np.multiply(lbl_np,fvis_np)
+        abs_tar_x_visi = np.fabs(tar_x_visi)
+        thresh =   abs_tar_x_visi >0
+        threshint = thresh.astype(int)
+        
         datatest = iovalid[0]
-        imgtest = datatest["imagetest"]
+        imgtest = datatest["imageYtest"]
         print "Test image shape"
         print imgtest.shape
 
+        cv.imwrite( "testout_srcY.png", img_np  )
+        cv.imwrite( "testout_srcU.png", img2_np  )
+        cv.imwrite( "testout_tar.png", lbl_np  )
+        cv.imwrite( "testout_vis.png", fvis_np*100  )
+        cv.imwrite( "testout_tarXvis.png", tar_x_visi  )
+        cv.imwrite( "testout_abs_tarXvis.png", abs_tar_x_visi*100  )
+        cv.imwrite( "testout_thresh_tarXvis.png", threshint*100  )
+        
         iotrain.stop()
         iovalid.stop()
         
@@ -150,8 +179,6 @@ def main():
             traceback.print_exc(e)
             break
 
-        #aa= model.layer1.conv1.weight.data.cpu().numpy()
-        #print aa.shape, aa[0,0,0,0]
         
         # remember best prec@1 and save checkpoint
         is_best_vis = prec1_vis > best_prec1_vis
@@ -227,24 +254,24 @@ def train(train_loader, model, criterion1, criterion2, lmbd, optimizer, nbatches
         lbl  = data["label"]
         vis  = data["match"]
         img_np  = np.zeros( (img.shape[0], 1, 512, 512), dtype=np.float32 )
-        img2_np = np.zeros( (img2.shape[0], 1, 512, 512), dtype=np.float32 )
-        lbl_np  = np.zeros( (lbl.shape[0], 512, 512 ), dtype=np.float32 )
+        img2_np = np.zeros( (img.shape[0], 1, 512, 512), dtype=np.float32 )
+        lbl_np  = np.zeros( (lbl.shape[0], 1, 512, 512 ), dtype=np.float32 )
         vis_np  = np.zeros( (vis.shape[0], 512, 512 ), dtype=np.int )
+        fvis_np  = np.zeros( (vis.shape[0], 1, 512, 512 ), dtype=np.float32 )
 
         # batch loop
         for j in range(img.shape[0]):
             img_np[j,0,:,:]  = img[j].reshape( (512,512) )
             img2_np[j,0,:,:] = img2[j].reshape( (512,512) )
-            lbl_np[j,:,:]    = lbl[j].reshape( (512,512) )
+            lbl_np[j,0,:,:]  = lbl[j].reshape( (512,512) )
             vis_np[j,:,:]    = vis[j].reshape( (512,512) )
+            fvis_np[j,0,:,:] = vis[j].reshape( (512,512) )
 
         input1      = torch.from_numpy(img_np).cuda()
         input2      = torch.from_numpy(img2_np).cuda()
         target_flow = torch.from_numpy(lbl_np).cuda()
         target_vis  = torch.from_numpy(vis_np).cuda()
-        #target_vis  = target_vis.lt( 0 ) + target_vis.gt( 0 )
-        floatvis    = target_vis.float()
-        target_vis  = target_vis.long()
+        floatvis    = torch.from_numpy(fvis_np).cuda()
         
         # measure data formatting time
         format_time.update(time.time() - end)
@@ -260,16 +287,16 @@ def train(train_loader, model, criterion1, criterion2, lmbd, optimizer, nbatches
         output_flow, output_vis = model.forward(input1_var, input2_var)
         loss1 = criterion1(output_flow, target_flow_var, floatvis_var)
         loss2 = criterion2(output_vis, target_vis_var)
-        #loss = loss1 + lmbd*loss2
-        loss = loss1
-        
+        loss = loss1 + lmbd*loss2
+        #loss = loss2 + lmbd*loss1
+
         # measure accuracy and record loss
         prec1_vis = myfunc.accuracy_vis(output_vis.data, target_vis)
         prec1_flow = []
-        prec1_flow.append( myfunc.accuracy_flow(output_flow.data, target_flow, target_vis, 5)  )
-        prec1_flow.append( myfunc.accuracy_flow(output_flow.data, target_flow, target_vis, 10) )
-        prec1_flow.append( myfunc.accuracy_flow(output_flow.data, target_flow, target_vis, 15) )
-        prec1_flow.append( myfunc.accuracy_flow(output_flow.data, target_flow, target_vis, 20) )
+        prec1_flow.append( myfunc.accuracy_flow(output_flow.data, target_flow, floatvis, 5)  )
+        prec1_flow.append( myfunc.accuracy_flow(output_flow.data, target_flow, floatvis, 10) )
+        prec1_flow.append( myfunc.accuracy_flow(output_flow.data, target_flow, floatvis, 15) )
+        prec1_flow.append( myfunc.accuracy_flow(output_flow.data, target_flow, floatvis, 20) )
 
         losses.update(loss.data[0], input1.size(0))
         top1_vis.update(prec1_vis[2], input1.size(0))
@@ -287,13 +314,14 @@ def train(train_loader, model, criterion1, criterion2, lmbd, optimizer, nbatches
 
         # measure elapsed time
         batch_time.update(time.time() - batchstart)
-        '''
-        for name, param in model.named_parameters():
-            if 'bn' not in name:
-                name = name.replace('.', '/')
-                writer.add_histogram(name, param.data, i*(1+epoch), 20)
-                #writer.add_histogram(name+'/grad', param.grad.data, epoch)
-        '''
+
+        if(i*(1+epoch)%100==0):
+            for name, param in model.named_parameters():
+                if 'bn' not in name:
+                    name = name.replace('.', '/')
+                    writer.add_histogram(name, param.data, i*(1+epoch), 25)
+                    #writer.add_histogram(name+'/grad', param.grad.data, epoch)
+        
         
         if i%print_freq==0:
             status = (epoch,i,nbatches,
@@ -346,22 +374,22 @@ def validate(val_loader, model, criterion1, criterion2, lmbd, nbatches, epoch, p
         vis  = data["matchtest"]
         img_np  = np.zeros( (img.shape[0], 1, 512, 512), dtype=np.float32 )
         img2_np = np.zeros( (img2.shape[0], 1, 512, 512), dtype=np.float32 )
-        lbl_np  = np.zeros( (lbl.shape[0], 512, 512 ), dtype=np.float32 )
+        lbl_np  = np.zeros( (lbl.shape[0], 1, 512, 512 ), dtype=np.float32 )
         vis_np  = np.zeros( (vis.shape[0], 512, 512 ), dtype=np.int )
+        fvis_np  = np.zeros( (vis.shape[0], 1, 512, 512 ), dtype=np.float32 )
 
         for j in range(img.shape[0]):
             img_np[j,0,:,:]  = img[j].reshape( (512,512) )
             img2_np[j,0,:,:] = img2[j].reshape( (512,512) )
-            lbl_np[j,:,:]    = lbl[j].reshape( (512,512) )
+            lbl_np[j,0,:,:]  = lbl[j].reshape( (512,512) )
             vis_np[j,:,:]    = vis[j].reshape( (512,512) )
-
+            fvis_np[j,0,:,:] = vis[j].reshape( (512,512) )
+            
         input1      = torch.from_numpy(img_np).cuda()
         input2      = torch.from_numpy(img2_np).cuda()
         target_flow = torch.from_numpy(lbl_np).cuda()
         target_vis  = torch.from_numpy(vis_np).cuda()
-        #target_vis  = target_vis.lt( 0 ) + target_vis.gt( 0 )
-        floatvis    = target_vis.float()
-        target_vis  = target_vis.long()
+        floatvis    = torch.from_numpy(fvis_np).cuda()
         
         input1_var = torch.autograd.Variable(input1, volatile=True)
         input2_var = torch.autograd.Variable(input2, volatile=True)
@@ -373,16 +401,16 @@ def validate(val_loader, model, criterion1, criterion2, lmbd, nbatches, epoch, p
         output_flow, output_vis = model.forward(input1_var, input2_var)
         loss1 = criterion1(output_flow, target_flow_var, floatvis_var)
         loss2 = criterion2(output_vis, target_vis_var)
-        #loss = loss1 + lmbd*loss2
-        loss = loss1
+        loss = loss1 + lmbd*loss2
+        #loss = loss2 + lmbd*loss1
         
         # measure accuracy and record loss
         prec1_vis = myfunc.accuracy_vis(output_vis.data, target_vis)
         prec1_flow = []
-        prec1_flow.append( myfunc.accuracy_flow(output_flow.data, target_flow, target_vis, 5)  )
-        prec1_flow.append( myfunc.accuracy_flow(output_flow.data, target_flow, target_vis, 10) )
-        prec1_flow.append( myfunc.accuracy_flow(output_flow.data, target_flow, target_vis, 15) )
-        prec1_flow.append( myfunc.accuracy_flow(output_flow.data, target_flow, target_vis, 20) )
+        prec1_flow.append( myfunc.accuracy_flow(output_flow.data, target_flow, floatvis, 5)  )
+        prec1_flow.append( myfunc.accuracy_flow(output_flow.data, target_flow, floatvis, 10) )
+        prec1_flow.append( myfunc.accuracy_flow(output_flow.data, target_flow, floatvis, 15) )
+        prec1_flow.append( myfunc.accuracy_flow(output_flow.data, target_flow, floatvis, 20) )
 
         losses.update(loss.data[0], input1.size(0))
         top1_vis.update(prec1_vis[2], input1.size(0))
