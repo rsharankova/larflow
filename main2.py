@@ -53,15 +53,17 @@ def main():
     lr = 1.0e-4 #-3 
     momentum = 0.9
     weight_decay = 1.0e-3
-    batchsize = 8
+    batchsize_train = 8
     batchsize_valid = 8
     start_epoch = 0
     epochs      = 50 #1500
+    nbatches_per_iter = 25
+    
     if len(sys.argv)>1:
         epochs = int(sys.argv[1])
     print "Number of epochs: ", epochs
-    print "Train batch: ", batchsize
-    
+    print "Train batch: ", batchsize_train
+    print "# batch per iter: ", nbatches_per_iter
 
     optimizer = torch.optim.SGD(model.parameters(), lr,
                                 momentum=momentum,
@@ -74,86 +76,107 @@ def main():
     iotrain = LArCVDataset("train_dataloader.cfg", "ThreadProcessor")
     iovalid = LArCVDataset("valid_dataloader.cfg", "ThreadProcessorTest")
     
-    iotrain.start(batchsize)
+    iotrain.start(batchsize_train)
     iovalid.start(batchsize_valid)
 
     #nbatch per epoch
     NENTRIES = iotrain.io.fetch_n_entries()
+    
     #NENTRIES=0;
     if NENTRIES>0:
-            nbatches_per_epoch = NENTRIES/batchsize
+            nbatches_per_epoch = NENTRIES/batchsize_train
             nbatches_per_valid = NENTRIES/batchsize_valid
     else:
             nbatches_per_epoch = 1
             nbatches_per_valid = 1
                 
-                
+
+    iter_per_epoch = nbatches_per_epoch/nbatches_per_iter
+    iter_per_valid = 5
+    iter_per_checkpoint = 150
+    num_iters = iter_per_epoch*epochs
+    print "Iterations: ", num_iters
     # Resume training option
     if False:
         checkpoint = torch.load( "checkpoint.pth.p01.tar" )
         best_prec1 = checkpoint["best_prec1"]
         model.load_state_dict(checkpoint["state_dict"])
         optimizer.load_state_dict(checkpoint['optimizer'])
-    
-    if False: #debug
-        data = iotrain[0]
-        img  = data["imageY"]
-        img2 = data["imageU"]
-        lbl  = data["label"]
-        vis  = data["match"]
-        '''
-        img_np  = np.zeros( (img.shape[0],  1, 512, 512), dtype=np.float32 )
-        img2_np = np.zeros( (img2.shape[0], 1, 512, 512), dtype=np.float32 )
-        lbl_np  = np.zeros( (lbl.shape[0], 1, 512, 512), dtype=np.int )
-        vis_np  = np.zeros( (vis.shape[0], 512, 512), dtype=np.int )
-        fvis_np  = np.zeros( (vis.shape[0], 1, 512, 512), dtype=np.float32 )
 
-        for j in range(img.shape[0]):
-            img_np[j,0,:,:]  = img[j].reshape( (512,512) )
-            img2_np[j,0,:,:] = img2[j].reshape( (512,512) )
-            lbl_np[j,0,:,:]  = lbl[j].reshape( (512,512) )
-            vis_np[j,:,:]    = vis[j].reshape( (512,512) )
-            fvis_np[j,0,:,:]  = vis[j].reshape( (512,512) ) 
-        '''
-        img_np  = np.zeros( ( 512, 512), dtype=np.float32 )
-        img2_np = np.zeros( ( 512, 512), dtype=np.float32 )
-        lbl_np  = np.zeros( ( 512, 512), dtype=np.int )
-        vis_np  = np.zeros( ( 512, 512), dtype=np.int )
-        fvis_np = np.zeros( ( 512, 512), dtype=np.float32 )
 
-        for j in range(1):#img.shape[0]):
-            img_np[:,:]  = img[j].reshape( (512,512) )
-            img2_np[:,:] = img2[j].reshape( (512,512) )
-            lbl_np[:,:]  = lbl[j].reshape( (512,512) )
-            vis_np[:,:]  = vis[j].reshape( (512,512) )
-            fvis_np[:,:] = vis[j].reshape( (512,512) ) 
-
-        tar_x_visi = np.multiply(lbl_np,fvis_np)
-        abs_tar_x_visi = np.fabs(tar_x_visi)
-        thresh =   abs_tar_x_visi >0
-        threshint = thresh.astype(int)
+    for ii in range(0, num_iters):
         
-        datatest = iovalid[0]
-        imgtest = datatest["imageYtest"]
-        print "Test image shape"
-        print imgtest.shape
+        myfunc.adjust_learning_rate(optimizer, ii, lr)
+        print "Iter:%d Epoch:%d.%d "%(ii,ii/iter_per_epoch,ii%iter_per_epoch),
+        for param_group in optimizer.param_groups:
+            print "lr=%.3e"%(param_group['lr']),
+            print
+            
+            # train for one epoch
+            try:
+                train_ave_loss, train_ave_acc_vis, train_ave_acc_flow = train(iotrain, model, criterion1, criterion2, lmbd, optimizer, nbatches_per_iter, ii, 10)
+                
+            except Exception,e:
+                print "Error in training routine!"
+                print e.message
+                print e.__class__.__name__
+                traceback.print_exc(e)
+                break
+            print "Iter:%d Epoch [%d.%d] train aveloss=%.3f aveacc_vis=%.3f aveacc_flow=%.3f"%(ii,ii/iter_per_epoch,ii%iter_per_epoch,
+                                                                                               train_ave_loss,train_ave_acc_vis,train_ave_acc_flow)             
+            # evaluate on validation set
+            if ii%iter_per_valid==0:
+                try:
+                    prec1_vis, prec1_flow = validate(iovalid, model, criterion1, criterion2, lmbd, nbatches_per_iter, ii, 10)
+                except Exception,e:
+                    print "Error in validation routine!"
+                    print e.message
+                    print e.__class__.__name__
+                    traceback.print_exc(e)
+                    break
+                
+                # remember best prec@1 and save checkpoint
+                is_best_flow = prec1_flow > best_prec1_flow
+                best_prec1_flow = max(prec1_flow, best_prec1_flow)
+                is_best_vis = prec1_vis > best_prec1_vis
+                best_prec1_vis = max(prec1_vis, best_prec1_vis)
+                
+                # check point for best model
+                if is_best_flow:
+                    print "Saving best model"
+                    myfunc.save_checkpoint({
+                        'iter':ii,
+                        'epoch': ii/iter_per_epoch,
+                        'state_dict': model.state_dict(),
+                        'best_prec1_vis': best_prec1_vis,
+                        'best_prec1_flow': best_prec1_flow,
+                        'optimizer' : optimizer.state_dict(),
+                    }, is_best_flow, -1)
+                    
+            # periodic checkpoint
+            if ii>0 and ii%iter_per_checkpoint==0:
+                print "saving periodic checkpoint"
+                myfunc.save_checkpoint({
+                    'iter':ii,
+                    'epoch': ii/iter_per_epoch,
+                    'state_dict': model.state_dict(),
+                    'best_prec1_vis': best_prec1_vis,
+                    'best_prec1_flow': best_prec1_flow,
+                    'optimizer' : optimizer.state_dict(),
+                }, False, ii)
+                
+        # end of profiler context
+        print "saving last state"
+        myfunc.save_checkpoint({
+            'iter':num_iters,
+            'epoch': num_iters/iter_per_epoch,
+            'state_dict': model.state_dict(),
+            'best_prec1_vis': best_prec1_vis,
+            'best_prec1_flow': best_prec1_flow,
+            'optimizer' : optimizer.state_dict(),
+        }, False, num_iters)
 
-        cv.imwrite( "testout_srcY.png", img_np  )
-        cv.imwrite( "testout_srcU.png", img2_np  )
-        cv.imwrite( "testout_tar.png", lbl_np  )
-        cv.imwrite( "testout_vis.png", fvis_np*100  )
-        cv.imwrite( "testout_tarXvis.png", tar_x_visi  )
-        cv.imwrite( "testout_abs_tarXvis.png", abs_tar_x_visi*100  )
-        cv.imwrite( "testout_thresh_tarXvis.png", threshint*100  )
-        
-        iotrain.stop()
-        iovalid.stop()
-        
-        return
-
-
-    #data = iotrain[0]
-    #data2 = iovalid[0]
+    '''
     for epoch in range(start_epoch, epochs):
 
         myfunc.adjust_learning_rate(optimizer, epoch, lr)
@@ -161,8 +184,7 @@ def main():
         for param_group in optimizer.param_groups:
             print "lr=%.3e"%(param_group['lr']),
         print
-
-        # train for one epoch
+            
         try:
             train_ave_loss, train_ave_acc_vis, train_ave_acc_flow = train(iotrain, model, criterion1, criterion2, lmbd, optimizer, nbatches_per_epoch, epoch, 100)
             #train_ave_loss, train_ave_acc_vis, train_ave_acc_flow = train(data, model, criterion1, criterion2, lmbd, optimizer, nbatches_per_epoch, epoch, 50)
@@ -189,13 +211,6 @@ def main():
         # remember best prec@1 and save checkpoint
         is_best_vis = prec1_vis > best_prec1_vis
         best_prec1_vis = max(prec1_vis, best_prec1_vis)
-        myfunc.save_checkpoint({
-            'epoch': epoch + 1,
-            'state_dict': model.state_dict(),
-            'best_prec1_vis': best_prec1_vis,
-            'best_prec1_flow': best_prec1_flow,
-            'optimizer' : optimizer.state_dict(),
-        }, is_best_vis, -1)
         is_best_flow = prec1_flow > best_prec1_flow
         best_prec1_flow = max(prec1_flow, best_prec1_flow)
         myfunc.save_checkpoint({
@@ -204,7 +219,7 @@ def main():
             'best_prec1_vis': best_prec1_vis,
             'best_prec1_flow': best_prec1_flow,
             'optimizer' : optimizer.state_dict(),
-        }, is_best_flow, -1)
+        }, is_best_vis, -1)
 
         if epoch%1==0:
             myfunc.save_checkpoint({
@@ -215,7 +230,7 @@ def main():
                 'optimizer' : optimizer.state_dict(),
             }, False, epoch)
             
-
+    '''
     writer.close()
     
     iotrain.stop()
@@ -280,6 +295,7 @@ def train(train_loader, model, criterion1, criterion2, lmbd, optimizer, nbatches
         target_vis  = torch.from_numpy(vis_np).cuda()
         floatvis    = torch.from_numpy(fvis_np).cuda()
 
+        #print "train: ", input1.sum(), input2.sum()
         # measure data formatting time
         format_time.update(time.time() - end)
         
@@ -321,14 +337,14 @@ def train(train_loader, model, criterion1, criterion2, lmbd, optimizer, nbatches
 
         # measure elapsed time
         batch_time.update(time.time() - batchstart)
-
+        '''
         if(i*(1+epoch)%1000==0):
             for name, param in model.named_parameters():
                 if 'bn' not in name:
                     name = name.replace('.', '/')
                     writer.add_histogram(name, param.data, i*(1+epoch), 25)
                     #writer.add_histogram(name+'/grad', param.grad.data, epoch)
-        
+        '''
         
         if i%print_freq==0:
             status = (epoch,i,nbatches,
@@ -339,7 +355,7 @@ def train(train_loader, model, criterion1, criterion2, lmbd, optimizer, nbatches
                       losses.val,losses.avg,
                       top1_vis.val,top1_vis.avg,
                       top1_flow.val,top1_flow.avg)
-            print "Epoch: [%d][%d/%d]\tTime %.3f (%.3f)\tData %.3f (%.3f)\tFormat %.3f (%.3f)\tTrain %.3f (%.3f)\tLoss %.3f (%.3f)\tvisPrec@1 %.3f (%.3f)\tflowPrec@1 %.3f (%.3f)"%status
+            print "Iter: [%d][%d/%d]\tTime %.3f (%.3f)\tData %.3f (%.3f)\tFormat %.3f (%.3f)\tTrain %.3f (%.3f)\tLoss %.3f (%.3f)\tvisPrec@1 %.3f (%.3f)\tflowPrec@1 %.3f (%.3f)"%status
 
     writer.add_scalar('data/train_loss', losses.avg, epoch )
     writer.add_scalars('data/train_accuracy_vis', {'vis 0': acc_list_vis[0].avg,
@@ -371,6 +387,8 @@ def validate(val_loader, model, criterion1, criterion2, lmbd, nbatches, epoch, p
     
     # switch to evaluate mode
     model.eval()
+    #debug: change to train
+    #model.train()
 
     end = time.time()
     for i in range(0,nbatches):
@@ -380,6 +398,10 @@ def validate(val_loader, model, criterion1, criterion2, lmbd, nbatches, epoch, p
         img2 = data["imageUtest"]
         lbl  = data["labeltest"]
         vis  = data["matchtest"]
+        #img  = data["imageY"]
+        #img2 = data["imageU"]
+        #lbl  = data["label"]
+        #vis  = data["match"]
 
         img_np  = np.zeros( (img.shape[0], 1, 512, 512), dtype=np.float32 )
         img2_np = np.zeros( (img2.shape[0], 1, 512, 512), dtype=np.float32 )
@@ -400,6 +422,7 @@ def validate(val_loader, model, criterion1, criterion2, lmbd, nbatches, epoch, p
         target_vis  = torch.from_numpy(vis_np).cuda()
         floatvis    = torch.from_numpy(fvis_np).cuda()
 
+        #print "valid: ", input1.sum(), input2.sum()
         input1_var = torch.autograd.Variable(input1, volatile=True)
         input2_var = torch.autograd.Variable(input2, volatile=True)
         target_flow_var = torch.autograd.Variable(target_flow, volatile=True)
